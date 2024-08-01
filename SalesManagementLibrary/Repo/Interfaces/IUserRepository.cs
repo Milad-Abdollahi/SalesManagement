@@ -17,9 +17,12 @@ public interface IUserRepository
     // Read
     Task<List<UserModel?>> GetAllUsers();
 
+    Task<UserModel?> GetUserById(int id);
+
 
 
     //Update
+    Task UpdateUser(int userId ,UserCreateDto userCreateDto);
 
 
     // Delete

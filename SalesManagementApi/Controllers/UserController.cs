@@ -46,25 +46,29 @@ public class UserController : ControllerBase
 
 
 
-
-
-
-
-
-    // GET api/<UserController>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
+    // GET api/User/5
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<UserModel>> Get(int userId)
     {
-        return "value";
+        var output = await _userRepository.GetUserById(userId);
+        return Ok(output);
     }
 
-    
 
-    // PUT api/<UserController>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+
+
+    // Update 
+
+    // PUT api/User/5
+    [HttpPut("{userId}")]
+    public async Task<ActionResult> Put(int userId, [FromBody] UserCreateDto userCreateDto)
     {
+        await _userRepository.UpdateUser(userId, userCreateDto);
+        return Ok();
     }
+
+
+
 
     // DELETE api/<UserController>/5
     [HttpDelete("{id}")]

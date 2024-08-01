@@ -46,7 +46,34 @@ public class UserRepository : IUserRepository
     // Read
     public async Task<List<UserModel?>> GetAllUsers()
     {
-        return await _dapperDataAccess.LoadData<UserModel, dynamic>("dbo.UsersGetAll", new { }, "DefaultConnection"); 
+        return await _dapperDataAccess.LoadData<UserModel>("dbo.UsersGetAll",  "DefaultConnection"); 
+    }
+
+    public async Task<UserModel?> GetUserById(int id)
+    {
+        var results = await _dapperDataAccess.
+            LoadData<UserModel, dynamic>("[dbo].[UsersGetById]", new { Id = id}, "DefaultConnection");
+        return results.FirstOrDefault();
+    }
+
+
+
+
+    // Update
+    public Task UpdateUser(int userId, UserCreateDto userCreateDto)
+    {
+        var parameters = new
+        {
+            Id = userId,
+            userCreateDto.Username,
+            userCreateDto.PasswordHash,
+            userCreateDto.Email,
+            userCreateDto.RoleId,
+            userCreateDto.CreatedDate,
+            userCreateDto.LastLoginDate
+        };
+
+        return _dapperDataAccess.SaveData<dynamic>("[dbo].[UserUpdate]", parameters, "DefaultConnection");
     }
 
 
@@ -57,7 +84,6 @@ public class UserRepository : IUserRepository
 
 
 
-    // Update
 
 
     // Delete

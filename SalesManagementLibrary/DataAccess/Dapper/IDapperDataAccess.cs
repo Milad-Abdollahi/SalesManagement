@@ -9,6 +9,8 @@ namespace SalesManagementLibrary.DataAccess.Dapper;
 public interface IDapperDataAccess
 {
     Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionStringName);
+    Task<List<T>> LoadData<T>(string storedProcedure, string connectionStringName);
+
 
     Task SaveData<T>(string storedProcedure, T parameters, string connectinStringName);
 }
