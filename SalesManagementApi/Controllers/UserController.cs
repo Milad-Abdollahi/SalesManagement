@@ -71,8 +71,9 @@ public class UserController : ControllerBase
 
 
     // DELETE api/<UserController>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
+    [HttpDelete("{userId}")]
+    public async void Delete(int userId)
     {
+        await _userRepository.DeleteUser(userId);
     }
 }

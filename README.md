@@ -6,10 +6,15 @@ STEPS:
 
 uncoment the decorations above Model attributes (for example [Required])
 
+WARNING: right now if you delete a User with an Id that does not exists it does not
+yell at you!
+
 ---
 
 2:
-crud with Authorization
+Add Authorization
+
+implement password hash
 
 ---
 

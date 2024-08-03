@@ -40,7 +40,7 @@ public class UserRepository : IUserRepository
         return result.FirstOrDefault();
     }
 
-
+    
 
 
     // Read
@@ -78,13 +78,13 @@ public class UserRepository : IUserRepository
 
 
 
-
-
-
-
-
-
-
-
     // Delete
+
+
+    public Task DeleteUser(int Id)
+    {
+        return _dapperDataAccess.SaveData<dynamic>("[dbo].[UsersDelete]", new { Id }, "DefaultConnection");
+    }
+
+
 }

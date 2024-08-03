@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SalesManagementLibrary.Models;
 
-public class UserRole
+public class UserRoleModel
 {
     //[Key]
     public int RoleId { get; set; }

@@ -26,4 +26,7 @@ public interface IUserRepository
 
 
     // Delete
+    Task DeleteUser(int userId);
+
+
 }

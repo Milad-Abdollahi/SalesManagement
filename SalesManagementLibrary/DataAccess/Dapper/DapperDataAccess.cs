@@ -47,10 +47,9 @@ public class DapperDataAccess : IDapperDataAccess
     public async Task SaveData<T>(string storedProcedure, T parameters, string connectinStringName)
     {
         string connectionString = _config.GetConnectionString(connectinStringName);
+        
         using IDbConnection connection = new SqlConnection(connectionString);
 
         await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
-
-
     }
 }
