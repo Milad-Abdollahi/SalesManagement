@@ -6,6 +6,8 @@ STEPS:
 
 uncoment the decorations above Model attributes (for example [Required])
 
+replace fake SP names with real SP names in UserRoleRepository.cs
+
 WARNING: right now if you delete a User with an Id that does not exists it does not
 yell at you!
 

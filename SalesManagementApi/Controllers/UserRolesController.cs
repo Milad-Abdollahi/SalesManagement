@@ -5,64 +5,69 @@ using SalesManagementLibrary.Repo.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SalesManagementApi.Controllers
+namespace SalesManagementApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UserRolesController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserRolesController : ControllerBase
+    private readonly IUserRoleRepository _userRoleRepository;
+
+    public UserRolesController(IUserRoleRepository userRoleRepository)
     {
-        private readonly IUserRoleRepository _userRoleRepository;
+        _userRoleRepository = userRoleRepository;
+    }
 
-        public UserRolesController(IUserRoleRepository userRoleRepository)
+    // Create
+    // POST api/<UserRolesController>
+    [HttpPost]
+    public async Task<ActionResult<UserRoleModel?>> CreateUserRole(UserRoleCreateDto userRoleCreateDto)
+    {
+        var userRole = await _userRoleRepository.CreateAsync(userRoleCreateDto);
+
+        if (userRole == null)
         {
-            _userRoleRepository = userRoleRepository;
+            return BadRequest("UserRole Creation Failed");
         }
 
-        // Create
-        // POST api/<UserRolesController>
-        [HttpPost]
-        public async Task<ActionResult<UserRoleModel?>> CreateUserRole(UserRoleCreateDto userRoleCreateDto)
-        {
-            var userRole = await _userRoleRepository.CreateAsync(userRoleCreateDto);
+        return Ok(userRole);
+    }
 
-            if (userRole == null)
-            {
-                return BadRequest("UserRole Creation Failed");
-            }
+    // Read
+    // GET: api/UserRoles
+    [HttpGet]
+    public async Task<ActionResult<List<UserRoleModel>>> GetAllUserRoles()
+    {
+        var result = await _userRoleRepository.GetAllUserRoleModelsAsync();
+        return Ok(result);
+    }
 
-            return Ok(userRole);
-        }
+    // GET api/UserRoles/5
+    [HttpGet("{userRoleId}")]
+    public async Task<ActionResult<UserRoleModel>> Get(int userRoleId)
+    {
+        var result = await _userRoleRepository.GetUserRoleByIdAsync(userRoleId);
+        return Ok(result);
+    }
+
+    
+
+    // Update
+    // PUT api/<UserRolesController>/5
+    [HttpPut("{userRoleId}")]
+    public async Task<ActionResult> Put(int userRoleId, [FromBody] UserRoleCreateDto userRoleCreateDto)
+    {
+        await _userRoleRepository.UpdateUserRoleAsync(userRoleId, userRoleCreateDto);
+        return Ok();
+    }
 
 
 
-
-
-        // GET: api/<UserRolesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UserRolesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        
-
-        // PUT api/<UserRolesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserRolesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+    // DELETE api/<UserRolesController>/5
+    [HttpDelete("{userRoleId}")]
+    public async Task<ActionResult> Delete(int userRoleId)
+    {
+        await _userRoleRepository.DeleteUserRoleAsync(userRoleId);
+        return Ok();
     }
 }
