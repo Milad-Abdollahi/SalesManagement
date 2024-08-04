@@ -15,6 +15,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

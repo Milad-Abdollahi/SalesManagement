@@ -37,13 +37,14 @@ public class UserRoleRepository : IUserRoleRepository
     // TODO: Replace "sp Name" 
     public async Task<List<UserRoleModel?>> GetAllUserRoleModelsAsync()
     {
-        return await _dapperDataAccess.LoadData<UserRoleModel>("GetAllUserRoleModels sp Name", "DefaultConnection");
+        return await _dapperDataAccess
+            .LoadData<UserRoleModel>("[dbo].[UserRolesGetAll]", "DefaultConnection");
     }
 
     public async Task<UserRoleModel?> GetUserRoleByIdAsync(int id)
     {
         var result = await _dapperDataAccess
-            .LoadData<UserRoleModel, dynamic>("Get User By Id Sp Name", new { RoleId = id}, );
+            .LoadData<UserRoleModel, dynamic>("[dbo].[UserRoleGetById]", new { RoleId = id }, "DefaultConnection");
         return result.FirstOrDefault();
     }
 
@@ -58,14 +59,16 @@ public class UserRoleRepository : IUserRoleRepository
             RoleName = userRoleCreateDto.RoleName
         };
 
-        return _dapperDataAccess.SaveData<dynamic>("Update Role SP", parameters, "DefaultConnection");
+        return _dapperDataAccess
+            .SaveData<dynamic>("[dbo].[UserRoleUpdate]", parameters, "DefaultConnection");
     }
 
 
     // Delete
     public Task DeleteUserRoleAsync(int id)
     {
-        return _dapperDataAccess.SaveData<dynamic>("Delete UserRole Stored Procedure", new { RoleId = id }, "DefaultConnection");
+        return _dapperDataAccess
+            .SaveData<dynamic>("[dbo].[UserRoleDelete]", new { RoleId = id }, "DefaultConnection");
     }
     
 }

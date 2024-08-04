@@ -31,7 +31,7 @@ public class DapperDataAccess : IDapperDataAccess
         
     }
 
-    public async Task<List<T>> LoadData<T>(string storedProcedure, string connectionStringName)
+    public async Task<List<T?>> LoadData<T>(string storedProcedure, string connectionStringName)
     {
         string connectionString = _config.GetConnectionString(connectionStringName);
         using IDbConnection connection = new SqlConnection(connectionString);
