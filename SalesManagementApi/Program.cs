@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IDapperDataAccess, DapperDataAccess>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 
 
 
