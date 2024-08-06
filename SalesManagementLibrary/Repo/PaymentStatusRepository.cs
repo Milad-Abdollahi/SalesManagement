@@ -25,10 +25,10 @@ public class PaymentStatusRepository : IPaymentStatusRepository
     {
         var parameters = new
         {
-            StatusName = paymentStatusCreateDto.StatusName,
+            paymentStatusCreateDto.StatusName,
         };
         var result = await _dapperDataAccess
-            .LoadData<PaymentStatusModel?, dynamic>("[dbo].[PaymentStatusInsert]", parameters, "DefaultConnection");
+            .LoadData<PaymentStatusModel, dynamic>("[dbo].[PaymentStatusInsert]", parameters, "DefaultConnection");
         return result.FirstOrDefault();
 
     }
@@ -37,7 +37,7 @@ public class PaymentStatusRepository : IPaymentStatusRepository
     public async Task<List<PaymentStatusModel?>> GetAllPaymentStatusesAsync()
     {
         var result = await _dapperDataAccess
-            .LoadData<PaymentStatusModel?>("[dbo].[PaymentStatusesGetAll]", "DefaultConnetcion");
+            .LoadData<PaymentStatusModel?>("[dbo].[PaymentStatusesGetAll]", "DefaultConnection");
 
         return result;
     }

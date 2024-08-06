@@ -16,20 +16,20 @@ public class PaymentStatusesController : ControllerBase
 
     public PaymentStatusesController(IPaymentStatusRepository paymentStatusRepository)
     {
-        this._paymentStatusRepository = paymentStatusRepository;
+        _paymentStatusRepository = paymentStatusRepository;
     }
 
 
     // Create
     // POST api/<PaymentStatusesController>
     [HttpPost]
-    public async Task<ActionResult<PaymentStatusModel?>> Post([FromBody] PaymentStatusCreateDto paymentStatusCreateDto)
+    public async Task<ActionResult<PaymentStatusModel?>> Post(PaymentStatusCreateDto paymentStatusCreateDto)
     {
         var result = await _paymentStatusRepository.CreatePaymentStatusAsync(paymentStatusCreateDto);
 
         if (result == null)
         {
-            return BadRequest();
+            return BadRequest("Payment Method Creation Failed!");
         }
 
         return Ok(result);

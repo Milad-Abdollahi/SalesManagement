@@ -8,6 +8,6 @@ namespace SalesManagementLibrary.Models;
 
 public class PaymentStatusModel
 {
-    public int Id { get; set; }
+    public int PaymentStatusId { get; set; }
     public string StatusName { get; set; }
 }

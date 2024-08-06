@@ -8,5 +8,5 @@ namespace SalesManagementLibrary.Models.Dtos;
 
 public class PaymentStatusCreateDto
 {
-    public string StatusName { get; set; }
+    public string? StatusName { get; set; }
 }

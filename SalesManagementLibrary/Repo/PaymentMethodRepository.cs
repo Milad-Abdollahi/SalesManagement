@@ -46,7 +46,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     public async Task<PaymentMethodModel?> GetPaymentMethodByIdAsync(int id)
     {
         var result = await _dapperDataAccess
-            .LoadData<PaymentMethodModel?, dynamic>("[dbo].[PaymentMethodsGetById]", new { Id = id}, "DefaultConnection");
+            .LoadData<PaymentMethodModel?, dynamic>("[dbo].[PaymentMethodsGetById]", new { Id = id }, "DefaultConnection");
 
         return result.FirstOrDefault();
     }
@@ -56,7 +56,8 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     {
         var parameters = new
         {
-            MethodName = paymentMethodCreateDto.MethodName,
+            Id = id,
+            paymentMethodCreateDto.MethodName,
         };
 
         return _dapperDataAccess.SaveData<dynamic>("[dbo].[PaymentMethodsUpdate]", parameters, "DefaultConnection");
