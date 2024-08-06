@@ -11,7 +11,7 @@ namespace SalesManagementLibrary.Repo.Interfaces;
 public interface IPaymentMethodRepository
 {
     // Create
-    Task<PaymentMethodModel?> CreatPaymentMethodAsync(PaymentMethodCreateDto paymentMethodCreateDto);
+    Task<PaymentMethodModel?> CreatePaymentMethodAsync(PaymentMethodCreateDto paymentMethodCreateDto);
 
     // Read
     Task<List<PaymentMethodModel?>> GetAllPaymentMethodsAsync();

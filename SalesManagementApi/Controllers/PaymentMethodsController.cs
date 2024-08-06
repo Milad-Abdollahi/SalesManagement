@@ -24,7 +24,7 @@ public class PaymentMethodsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<PaymentMethodModel?>> CreatePaymentMethod([FromBody] PaymentMethodCreateDto paymentMethodCreateDto)
     {
-        var paymentMethod = await _paymentMethodRepository.CreatPaymentMethodAsync(paymentMethodCreateDto);
+        var paymentMethod = await _paymentMethodRepository.CreatePaymentMethodAsync(paymentMethodCreateDto);
         if (paymentMethod == null)
         {
             return BadRequest();
@@ -34,32 +34,39 @@ public class PaymentMethodsController : ControllerBase
 
 
 
+    // Read
 
-
-    // GET: api/<PaymentMethodsController>
+    // GET: api/MethodsController
     [HttpGet]
-    public IEnumerable<string> Get()
+    public async Task<ActionResult<List<PaymentMethodModel>>> GetAllPaymentMethods()
     {
-        return new string[] { "value1", "value2" };
+        var result = await _paymentMethodRepository.GetAllPaymentMethodsAsync();
+        return Ok(result);  
     }
 
-    // GET api/<PaymentMethodsController>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
+    // GET api/PaymentMethods/5
+    [HttpGet("{paymentMethodId}")]
+    public async Task<ActionResult<PaymentMethodModel>> Get(int paymentMethodId)
     {
-        return "value";
+        var result = await _paymentMethodRepository.GetPaymentMethodByIdAsync(paymentMethodId);
+        return Ok(result);
     }
 
 
-    // PUT api/<PaymentMethodsController>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    // Update
+    // PUT api/PaymentMethods/5
+    [HttpPut("{paymentMethodId}")]
+    public async Task<ActionResult> Put(int paymentMethodId, [FromBody] PaymentMethodCreateDto paymentMethodCreateDto)
     {
+        await _paymentMethodRepository.UpdatePaymentMethodAsync(paymentMethodId, paymentMethodCreateDto);
+        return Ok();
     }
 
-    // DELETE api/<PaymentMethodsController>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
+    // DELETE api/PaymentMethods/5
+    [HttpDelete("{paymentMethodId}")]
+    public async Task<ActionResult> Delete(int paymentMethodId)
     {
+        await _paymentMethodRepository.DeletePaymentMethodAsync(paymentMethodId);
+        return Ok();
     }
 }

@@ -21,7 +21,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
     // Create
-    public async Task<PaymentMethodModel?> CreatPaymentMethodAsync(PaymentMethodCreateDto paymentMethodCreateDto)
+    public async Task<PaymentMethodModel?> CreatePaymentMethodAsync(PaymentMethodCreateDto paymentMethodCreateDto)
     {
         var parameters = new
         {
@@ -41,6 +41,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
 
         return result;
     }
+
 
     public async Task<PaymentMethodModel?> GetPaymentMethodByIdAsync(int id)
     {
@@ -62,8 +63,8 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
 
-    // Delete
 
+    // Delete
     public Task DeletePaymentMethodAsync(int id)
     {
         return _dapperDataAccess
