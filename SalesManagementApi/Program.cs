@@ -15,6 +15,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 builder.Services.AddScoped<IPaymentStatusRepository, PaymentStatusRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 
 
