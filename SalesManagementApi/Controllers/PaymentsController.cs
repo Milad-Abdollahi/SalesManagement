@@ -35,19 +35,21 @@ public class PaymentsController : ControllerBase
     }
 
 
-
+    // Read
     // GET: api/<PaymentsController>
     [HttpGet]
-    public IEnumerable<string> Get()
+    public async Task<ActionResult<List<PaymentModel>>> Get()
     {
-        return new string[] { "value1", "value2" };
+        var result = await _paymentRepository.GetAllPaymentsAsync();
+        return Ok(result);
     }
 
     // GET api/<PaymentsController>/5
-    [HttpGet("{id}")]
-    public string Get(int id)
+    [HttpGet("{paymentId}")]
+    public async Task<ActionResult<PaymentModel>> Get(int paymentId)
     {
-        return "value";
+        var payment = await _paymentRepository.GetPaymentByIdAsync(paymentId);
+        return Ok(payment);
     }
 
 

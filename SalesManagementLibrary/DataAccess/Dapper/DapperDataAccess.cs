@@ -41,8 +41,23 @@ public class DapperDataAccess : IDapperDataAccess
         return rows.ToList();
     }
 
+    public async Task<List<T>> LoadDataWithMultiMapping<T, T1, T2, U>
+        (string storedProcedure, Func<T, T1, T2, T> map, U parameters, string connectionStringName, string splitOn)
+    {
+        string connectionString = _config.GetConnectionString(connectionStringName);
 
+        using IDbConnection connection = new SqlConnection(connectionString);
 
+        var rows = await connection.QueryAsync<T, T1, T2, T>(
+                storedProcedure,
+                map,
+                parameters,
+                commandType: CommandType.StoredProcedure,
+                splitOn: splitOn
+            );
+
+        return rows.ToList();
+    }
 
     public async Task SaveData<T>(string storedProcedure, T parameters, string connectinStringName)
     {

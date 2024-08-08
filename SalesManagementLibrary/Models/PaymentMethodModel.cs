@@ -8,6 +8,6 @@ namespace SalesManagementLibrary.Models;
 
 public class PaymentMethodModel
 {
-    public int Id { get; set; }
-    public string MethodName { get; set; }
+    public int PaymentMethodId { get; set; }
+    public string? MethodName { get; set; }
 }
