@@ -52,16 +52,22 @@ public class PaymentsController : ControllerBase
         return Ok(payment);
     }
 
-
-    // PUT api/<PaymentsController>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    // Update
+    // PUT api/Payments/5
+    [HttpPut("{paymentId}")]
+    public async Task<ActionResult> Put(int paymentId, [FromBody] PaymentCreateDto paymentCreateDto)
     {
+        await _paymentRepository.UpdatePaymentAsyc(paymentId, paymentCreateDto);
+        return Ok();
     }
 
+
+    // Delete
     // DELETE api/<PaymentsController>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
+    [HttpDelete("{paymentId}")]
+    public async Task<ActionResult> Delete(int paymentId)
     {
+        await _paymentRepository.DeletePaymentAsync(paymentId);
+        return Ok();
     }
 }

@@ -19,6 +19,7 @@ public class PaymentRepository : IPaymentRepository
         _dapperDataAccess = dapperDataAccess;
     }
 
+
     // Create
     public async Task<PaymentModel?> CreatePaymentAsync(PaymentCreateDto paymentCreateDto)
     {
@@ -36,12 +37,11 @@ public class PaymentRepository : IPaymentRepository
     }
 
 
+
+
+
     // Read
     
-
-
-
-
     public async Task<PaymentModel?> GetPaymentByIdAsync(int id)
     {
         var payments = await _dapperDataAccess
@@ -79,39 +79,10 @@ public class PaymentRepository : IPaymentRepository
     }
 
 
-    // Update
-    public Task UpdatePaymentAsyc(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    // Delete
-    public Task DeletePaymentAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     public async Task<List<PaymentModel?>> GetAllPaymentsAsync()
     {
-        //var sql = "[dbo].[PaymentsGetAll]";
-
-        //var payments = await _dapperDataAccess.LoadDataWithMultiMapping<PaymentModel, PaymentStatusModel, PaymentMethodModel, dynamic>(
-        //    sql,
-        //    (payment, paymentStatus, paymentMethod) =>
-        //    {
-        //        payment.PaymentStatus = paymentStatus;
-        //        payment.PaymentMetod = paymentMethod;
-        //        return payment;
-        //    },
-        //    new { },
-        //    "DefaultConnection",
-        //    splitOn: "PaymentStatusId,PaymentMethodId"
-        //);
-
-        //return payments;
-
-
         List<PaymentDto?> paymentDtos = await this.GetAllPaymentsWithDetailsAsync();
 
         List<PaymentModel> payments = new List<PaymentModel>();
@@ -125,7 +96,7 @@ public class PaymentRepository : IPaymentRepository
     }
 
 
-    public async Task<List<PaymentDto?>> GetAllPaymentsWithDetailsAsync()
+    private async Task<List<PaymentDto?>> GetAllPaymentsWithDetailsAsync()
     {
         var sql = "[dbo].[PaymentsGetAllWithDetails]";
 
@@ -138,7 +109,7 @@ public class PaymentRepository : IPaymentRepository
     }
 
 
-    public PaymentModel MapDtoToModel(PaymentDto dto) 
+    private PaymentModel MapDtoToModel(PaymentDto dto) 
     {
         return new PaymentModel
         {
@@ -157,6 +128,36 @@ public class PaymentRepository : IPaymentRepository
                 MethodName = dto.MethodName ,
             }
         };
+    }
+
+
+
+
+    // Update
+    public Task UpdatePaymentAsyc(int id, PaymentCreateDto paymentCreateDto)
+    {
+        var parameter = new
+        {
+            PaymentId = id,
+            OrderId = paymentCreateDto.OrderId,
+            PaymentDate = paymentCreateDto.PaymentDate,
+            Amount = paymentCreateDto.Amount,
+            PaymentMethodId = paymentCreateDto.PaymentMetod.PaymentMethodId,
+            PaymentStatusId = paymentCreateDto.PaymentStatus.PaymentStatusId,
+        };
+
+        return _dapperDataAccess
+            .SaveData<dynamic>("[dbo].[PaymentsUpdate]", parameter, "DefaultConnection");
+    }
+
+
+
+
+    // Delete
+    public Task DeletePaymentAsync(int id)
+    {
+        return _dapperDataAccess
+            .SaveData<dynamic>("[dbo].[PaymentsDelete]", new { PaymentId = id }, "DefaultConnection");
     }
 
 }

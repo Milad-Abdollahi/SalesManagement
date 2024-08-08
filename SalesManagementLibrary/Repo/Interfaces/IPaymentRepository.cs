@@ -18,7 +18,7 @@ public interface IPaymentRepository
     Task<PaymentModel?> GetPaymentByIdAsync(int id);
 
     // Update
-    Task UpdatePaymentAsyc(int id);
+    Task UpdatePaymentAsyc(int id, PaymentCreateDto paymentCreateDto);
 
     // Delete
     Task DeletePaymentAsync(int id);
