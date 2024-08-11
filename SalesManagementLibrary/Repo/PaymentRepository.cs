@@ -1,12 +1,12 @@
-﻿using SalesManagementLibrary.DataAccess.Dapper;
-using SalesManagementLibrary.Models;
-using SalesManagementLibrary.Models.Dtos;
-using SalesManagementLibrary.Repo.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SalesManagementLibrary.DataAccess.Dapper;
+using SalesManagementLibrary.Models;
+using SalesManagementLibrary.Models.Dtos;
+using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementLibrary.Repo;
 
@@ -19,7 +19,6 @@ public class PaymentRepository : IPaymentRepository
         _dapperDataAccess = dapperDataAccess;
     }
 
-
     // Create
     public async Task<PaymentModel?> CreatePaymentAsync(PaymentCreateDto paymentCreateDto)
     {
@@ -31,21 +30,23 @@ public class PaymentRepository : IPaymentRepository
             PaymentMethodId = paymentCreateDto.PaymentMetod.PaymentMethodId,
             PaymentStatusId = paymentCreateDto.PaymentStatus.PaymentStatusId,
         };
-        var result = await _dapperDataAccess
-            .LoadData<PaymentModel?, dynamic>("[dbo].[PaymentsInsert]", parameter, "DefaultConnection");
+        var result = await _dapperDataAccess.LoadData<PaymentModel?, dynamic>(
+            "[dbo].[PaymentsInsert]",
+            parameter,
+            "DefaultConnection"
+        );
         return result.FirstOrDefault();
     }
 
-
-
-
-
     // Read
-    
+
     public async Task<PaymentModel?> GetPaymentByIdAsync(int id)
     {
-        var payments = await _dapperDataAccess
-            .LoadData<PaymentModel?, dynamic>("[dbo].[PaymentsGetById]", new { PaymentId = id }, "DefaultConnection");
+        var payments = await _dapperDataAccess.LoadData<PaymentModel?, dynamic>(
+            "[dbo].[PaymentsGetById]",
+            new { PaymentId = id },
+            "DefaultConnection"
+        );
 
         var payment = payments.FirstOrDefault();
 
@@ -54,32 +55,26 @@ public class PaymentRepository : IPaymentRepository
             return null;
         }
 
-        var paymentStatuses = await _dapperDataAccess
-            .LoadData<PaymentStatusModel?, dynamic>(
-            "[dbo].[PaymentStatusesGetByPaymentId]", 
+        var paymentStatuses = await _dapperDataAccess.LoadData<PaymentStatusModel?, dynamic>(
+            "[dbo].[PaymentStatusesGetByPaymentId]",
             new { PaymentId = id },
-            "DefaultConnection");
+            "DefaultConnection"
+        );
 
         PaymentStatusModel? paymentStatus = paymentStatuses.FirstOrDefault();
 
-        var paymentMetods = await _dapperDataAccess
-            .LoadData<PaymentMethodModel?, dynamic>(
+        var paymentMetods = await _dapperDataAccess.LoadData<PaymentMethodModel?, dynamic>(
             "[dbo].[PaymentMetodGetByPaymentId]",
             new { PaymentId = id },
             "DefaultConnection"
-            );
+        );
         PaymentMethodModel? paymentMetod = paymentMetods.FirstOrDefault();
-
 
         payment.PaymentStatus = paymentStatus;
         payment.PaymentMetod = paymentMetod;
 
-
         return payment;
     }
-
-
-    
 
     public async Task<List<PaymentModel?>> GetAllPaymentsAsync()
     {
@@ -95,7 +90,6 @@ public class PaymentRepository : IPaymentRepository
         return payments;
     }
 
-
     private async Task<List<PaymentDto?>> GetAllPaymentsWithDetailsAsync()
     {
         var sql = "[dbo].[PaymentsGetAllWithDetails]";
@@ -108,8 +102,7 @@ public class PaymentRepository : IPaymentRepository
         return payments;
     }
 
-
-    private PaymentModel MapDtoToModel(PaymentDto dto) 
+    private PaymentModel MapDtoToModel(PaymentDto dto)
     {
         return new PaymentModel
         {
@@ -117,21 +110,18 @@ public class PaymentRepository : IPaymentRepository
             OrderId = dto.OrderId,
             PaymentDate = dto.PaymentDate,
             Amount = dto.Amount,
-            PaymentStatus = new PaymentStatusModel 
-            { 
-                PaymentStatusId = dto.PaymentStatusId ,
+            PaymentStatus = new PaymentStatusModel
+            {
+                PaymentStatusId = dto.PaymentStatusId,
                 StatusName = dto.StatusName
             },
             PaymentMetod = new PaymentMethodModel
             {
-                PaymentMethodId = dto.PaymentMethodId ,
-                MethodName = dto.MethodName ,
+                PaymentMethodId = dto.PaymentMethodId,
+                MethodName = dto.MethodName,
             }
         };
     }
-
-
-
 
     // Update
     public Task UpdatePaymentAsyc(int id, PaymentCreateDto paymentCreateDto)
@@ -146,18 +136,20 @@ public class PaymentRepository : IPaymentRepository
             PaymentStatusId = paymentCreateDto.PaymentStatus.PaymentStatusId,
         };
 
-        return _dapperDataAccess
-            .SaveData<dynamic>("[dbo].[PaymentsUpdate]", parameter, "DefaultConnection");
+        return _dapperDataAccess.SaveData<dynamic>(
+            "[dbo].[PaymentsUpdate]",
+            parameter,
+            "DefaultConnection"
+        );
     }
-
-
-
 
     // Delete
     public Task DeletePaymentAsync(int id)
     {
-        return _dapperDataAccess
-            .SaveData<dynamic>("[dbo].[PaymentsDelete]", new { PaymentId = id }, "DefaultConnection");
+        return _dapperDataAccess.SaveData<dynamic>(
+            "[dbo].[PaymentsDelete]",
+            new { PaymentId = id },
+            "DefaultConnection"
+        );
     }
-
 }
