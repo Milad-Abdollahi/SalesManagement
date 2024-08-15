@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BCrypt.Net;
 using SalesManagementLibrary.DataAccess.Dapper;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
@@ -22,10 +23,12 @@ public class UserRepository : IUserRepository
     // Create
     public async Task<UserModel?> CreateAsync(UserCreateDto userCreateDto)
     {
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreateDto.PasswordHash);
+
         var parameters = new
         {
             userCreateDto.Username,
-            userCreateDto.PasswordHash,
+            PasswordHash = hashedPassword,
             userCreateDto.Email,
             userCreateDto.RoleId,
             userCreateDto.CreatedDate,
@@ -54,17 +57,36 @@ public class UserRepository : IUserRepository
             new { Id = id },
             "DefaultConnection"
         );
+
+        var user = results.FirstOrDefault();
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with Id {id} not found.");
+        }
+
+        return results.FirstOrDefault();
+    }
+
+    public async Task<UserModel?> GetUserByUsername(string userName)
+    {
+        var results = await _dapperDataAccess.LoadData<UserModel?, dynamic>(
+            "[dbo].[UsersGetByUsername]",
+            new { UserName = userName },
+            "DefaultConnection"
+        );
         return results.FirstOrDefault();
     }
 
     // Update
     public Task UpdateUser(int userId, UserCreateDto userCreateDto)
     {
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreateDto.PasswordHash);
         var parameters = new
         {
             Id = userId,
             userCreateDto.Username,
-            userCreateDto.PasswordHash,
+            PasswordHash = hashedPassword,
             userCreateDto.Email,
             userCreateDto.RoleId,
             userCreateDto.CreatedDate,

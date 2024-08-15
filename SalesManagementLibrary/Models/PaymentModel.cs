@@ -13,5 +13,5 @@ public class PaymentModel
     public DateTime PaymentDate { get; set; }
     public decimal Amount { get; set; }
     public PaymentStatusModel PaymentStatus { get; set; }
-    public PaymentMethodModel PaymentMetod { get; set; }
+    public PaymentMetodModel PaymentMetod { get; set; }
 }

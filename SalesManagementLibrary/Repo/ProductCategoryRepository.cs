@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using SalesManagementLibrary.DataAccess.Dapper;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
+using SalesManagementLibrary.Repo.Interfaces;
 
-namespace SalesManagementLibrary.Repo.Interfaces;
+namespace SalesManagementLibrary.Repo;
 
 public class ProductCategoryRepository : IProductCategoryRepository
 {
@@ -23,7 +24,7 @@ public class ProductCategoryRepository : IProductCategoryRepository
         ProductCategoryCreateDto productCategoryCreateDto
     )
     {
-        var parameter = new { CategoryName = productCategoryCreateDto.CategoryName, };
+        var parameter = new { productCategoryCreateDto.CategoryName, };
 
         var result = await _dapperDataAccess.LoadData<ProductCategoryModel?, dynamic>(
             "[dbo].[ProductCategoryInsert]",
@@ -60,7 +61,7 @@ public class ProductCategoryRepository : IProductCategoryRepository
     {
         return _dapperDataAccess.SaveData<dynamic>(
             "[dbo].[ProductCategoriesUpdate]",
-            new { ProductCategoryId = id, CategoryName = productCategoryCreateDto.CategoryName },
+            new { ProductCategoryId = id, productCategoryCreateDto.CategoryName },
             "DefaultConnection"
         );
     }

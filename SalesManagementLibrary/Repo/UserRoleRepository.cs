@@ -1,12 +1,12 @@
-﻿using SalesManagementLibrary.DataAccess.Dapper;
-using SalesManagementLibrary.Models;
-using SalesManagementLibrary.Models.Dtos;
-using SalesManagementLibrary.Repo.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SalesManagementLibrary.DataAccess.Dapper;
+using SalesManagementLibrary.Models;
+using SalesManagementLibrary.Models.Dtos;
+using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementLibrary.Repo;
 
@@ -22,53 +22,53 @@ public class UserRoleRepository : IUserRoleRepository
     // Create
     public async Task<UserRoleModel?> CreateAsync(UserRoleCreateDto userRoleCreateDto)
     {
-        var result = await _dapperDataAccess
-            .LoadData<UserRoleModel, dynamic>("[dbo].[UserRoleInsert]",
+        var result = await _dapperDataAccess.LoadData<UserRoleModel, dynamic>(
+            "[dbo].[UserRoleInsert]",
             new { RoleName = userRoleCreateDto.RoleName },
-            "DefaultConnection");
+            "DefaultConnection"
+        );
 
         return result.FirstOrDefault();
     }
 
-
-
-
     // Read
-    // TODO: Replace "sp Name" 
     public async Task<List<UserRoleModel?>> GetAllUserRoleModelsAsync()
     {
-        return await _dapperDataAccess
-            .LoadData<UserRoleModel>("[dbo].[UserRolesGetAll]", "DefaultConnection");
+        return await _dapperDataAccess.LoadData<UserRoleModel>(
+            "[dbo].[UserRolesGetAll]",
+            "DefaultConnection"
+        );
     }
 
     public async Task<UserRoleModel?> GetUserRoleByIdAsync(int id)
     {
-        var result = await _dapperDataAccess
-            .LoadData<UserRoleModel, dynamic>("[dbo].[UserRoleGetById]", new { RoleId = id }, "DefaultConnection");
+        var result = await _dapperDataAccess.LoadData<UserRoleModel, dynamic>(
+            "[dbo].[UserRoleGetById]",
+            new { Id = id },
+            "DefaultConnection"
+        );
         return result.FirstOrDefault();
     }
-
-
 
     // Update
     public Task UpdateUserRoleAsync(int id, UserRoleCreateDto userRoleCreateDto)
     {
-        var parameters = new
-        {
-            RoleId = id,
-            RoleName = userRoleCreateDto.RoleName
-        };
+        var parameters = new { RoleId = id, RoleName = userRoleCreateDto.RoleName };
 
-        return _dapperDataAccess
-            .SaveData<dynamic>("[dbo].[UserRoleUpdate]", parameters, "DefaultConnection");
+        return _dapperDataAccess.SaveData<dynamic>(
+            "[dbo].[UserRoleUpdate]",
+            parameters,
+            "DefaultConnection"
+        );
     }
-
 
     // Delete
     public Task DeleteUserRoleAsync(int id)
     {
-        return _dapperDataAccess
-            .SaveData<dynamic>("[dbo].[UserRoleDelete]", new { RoleId = id }, "DefaultConnection");
+        return _dapperDataAccess.SaveData<dynamic>(
+            "[dbo].[UserRoleDelete]",
+            new { RoleId = id },
+            "DefaultConnection"
+        );
     }
-    
 }

@@ -33,8 +33,6 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-
-
     // Read
     [HttpGet]
     // GET: api/<UserController>
@@ -44,20 +42,22 @@ public class UserController : ControllerBase
         return Ok(output);
     }
 
-
-
     // GET api/User/5
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserModel>> Get(int userId)
     {
-        var output = await _userRepository.GetUserById(userId);
-        return Ok(output);
+        try
+        {
+            var user = await _userRepository.GetUserById(userId);
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { Message = ex.Message });
+        }
     }
 
-
-
-
-    // Update 
+    // Update
 
     // PUT api/User/5
     [HttpPut("{userId}")]
@@ -66,9 +66,6 @@ public class UserController : ControllerBase
         await _userRepository.UpdateUser(userId, userCreateDto);
         return Ok();
     }
-
-
-
 
     // DELETE api/<UserController>/5
     [HttpDelete("{userId}")]

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SalesManagementLibrary.Models.Dtos;
 
-public class PaymentMethodCreateDto
+public class PaymentMetodCreateDto
 {
-    public string MethodName { get; set; }
+    public string MetodName { get; set; }
 }

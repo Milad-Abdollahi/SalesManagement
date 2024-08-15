@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SalesManagementLibrary.Models;
 
-public class PaymentMethodModel
+public class PaymentMetodModel
 {
-    public int PaymentMethodId { get; set; }
-    public string? MethodName { get; set; }
+    public int Id { get; set; }
+    public string? MetodName { get; set; }
 }

@@ -27,8 +27,8 @@ public class PaymentRepository : IPaymentRepository
             OrderId = paymentCreateDto.OrderId,
             PaymentDate = paymentCreateDto.PaymentDate,
             Amount = paymentCreateDto.Amount,
-            PaymentMethodId = paymentCreateDto.PaymentMetod.PaymentMethodId,
-            PaymentStatusId = paymentCreateDto.PaymentStatus.PaymentStatusId,
+            PaymentMethodId = paymentCreateDto.PaymentMetod.Id,
+            PaymentStatusId = paymentCreateDto.PaymentStatus.Id,
         };
         var result = await _dapperDataAccess.LoadData<PaymentModel?, dynamic>(
             "[dbo].[PaymentsInsert]",
@@ -63,12 +63,12 @@ public class PaymentRepository : IPaymentRepository
 
         PaymentStatusModel? paymentStatus = paymentStatuses.FirstOrDefault();
 
-        var paymentMetods = await _dapperDataAccess.LoadData<PaymentMethodModel?, dynamic>(
+        var paymentMetods = await _dapperDataAccess.LoadData<PaymentMetodModel?, dynamic>(
             "[dbo].[PaymentMetodGetByPaymentId]",
             new { PaymentId = id },
             "DefaultConnection"
         );
-        PaymentMethodModel? paymentMetod = paymentMetods.FirstOrDefault();
+        PaymentMetodModel? paymentMetod = paymentMetods.FirstOrDefault();
 
         payment.PaymentStatus = paymentStatus;
         payment.PaymentMetod = paymentMetod;
@@ -112,13 +112,13 @@ public class PaymentRepository : IPaymentRepository
             Amount = dto.Amount,
             PaymentStatus = new PaymentStatusModel
             {
-                PaymentStatusId = dto.PaymentStatusId,
+                Id = dto.PaymentStatusId,
                 StatusName = dto.StatusName
             },
-            PaymentMetod = new PaymentMethodModel
+            PaymentMetod = new PaymentMetodModel
             {
-                PaymentMethodId = dto.PaymentMethodId,
-                MethodName = dto.MethodName,
+                Id = dto.PaymentMethodId,
+                MetodName = dto.MethodName,
             }
         };
     }
@@ -132,8 +132,8 @@ public class PaymentRepository : IPaymentRepository
             OrderId = paymentCreateDto.OrderId,
             PaymentDate = paymentCreateDto.PaymentDate,
             Amount = paymentCreateDto.Amount,
-            PaymentMethodId = paymentCreateDto.PaymentMetod.PaymentMethodId,
-            PaymentStatusId = paymentCreateDto.PaymentStatus.PaymentStatusId,
+            PaymentMethodId = paymentCreateDto.PaymentMetod.Id,
+            PaymentStatusId = paymentCreateDto.PaymentStatus.Id,
         };
 
         return _dapperDataAccess.SaveData<dynamic>(

@@ -27,6 +27,11 @@ public class ProductCategoriesController : ControllerBase
         [FromBody] ProductCategoryCreateDto productCategoryCreateDto
     )
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var result = await _productCategoryRepository.CreateProductCategoryAsyc(
             productCategoryCreateDto
         );

@@ -10,7 +10,7 @@ namespace SalesManagementLibrary.Models;
 public class UserRoleModel
 {
     //[Key]
-    public int RoleId { get; set; }
+    public int Id { get; set; }
 
     //[Required]
     //[StringLength(50)]

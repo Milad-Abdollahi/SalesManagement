@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
 using SalesManagementLibrary.Repo.Interfaces;
@@ -19,9 +20,11 @@ public class UserRolesController : ControllerBase
     }
 
     // Create
-    // POST api/<UserRolesController>
+    // POST api/UserRoles
     [HttpPost]
-    public async Task<ActionResult<UserRoleModel?>> CreateUserRole(UserRoleCreateDto userRoleCreateDto)
+    public async Task<ActionResult<UserRoleModel?>> CreateUserRole(
+        UserRoleCreateDto userRoleCreateDto
+    )
     {
         var userRole = await _userRoleRepository.CreateAsync(userRoleCreateDto);
 
@@ -38,6 +41,8 @@ public class UserRolesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<UserRoleModel>>> GetAllUserRoles()
     {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
         var result = await _userRoleRepository.GetAllUserRoleModelsAsync();
         return Ok(result);
     }
@@ -47,21 +52,26 @@ public class UserRolesController : ControllerBase
     public async Task<ActionResult<UserRoleModel>> Get(int userRoleId)
     {
         var result = await _userRoleRepository.GetUserRoleByIdAsync(userRoleId);
+
+        if (result == null)
+        {
+            return BadRequest("No UserRoles Found!");
+        }
+
         return Ok(result);
     }
-
-    
 
     // Update
     // PUT api/<UserRolesController>/5
     [HttpPut("{userRoleId}")]
-    public async Task<ActionResult> Put(int userRoleId, [FromBody] UserRoleCreateDto userRoleCreateDto)
+    public async Task<ActionResult> Put(
+        int userRoleId,
+        [FromBody] UserRoleCreateDto userRoleCreateDto
+    )
     {
         await _userRoleRepository.UpdateUserRoleAsync(userRoleId, userRoleCreateDto);
         return Ok();
     }
-
-
 
     // DELETE api/<UserRolesController>/5
     [HttpDelete("{userRoleId}")]
