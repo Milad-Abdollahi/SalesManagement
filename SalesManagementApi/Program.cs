@@ -10,6 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader()
+    );
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,6 +54,7 @@ builder.Services.AddScoped<IPaymentMetodRepository, PaymentMetodRepository>();
 builder.Services.AddScoped<IPaymentStatusRepository, PaymentStatusRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+builder.Services.AddScoped<ICustomerTypeRepository, CustomerTypeRepository>();
 
 var app = builder.Build();
 
@@ -56,6 +66,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigin");
 
 //app.UseAuthentication();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -58,15 +59,29 @@ public class PaymentMetodRepository : IPaymentMetodRepository
     }
 
     // Update
-    public Task UpdatePaymentMetodAsync(int id, PaymentMetodCreateDto paymentMetodCreateDto)
+    public async Task UpdatePaymentMetodAsync(int id, PaymentMetodCreateDto paymentMetodCreateDto)
     {
         var parameters = new { Id = id, paymentMetodCreateDto.MetodName, };
 
-        return _dapperDataAccess.SaveData<dynamic>(
-            "[dbo].[PaymentMetodsUpdate]",
-            parameters,
-            "DefaultConnection"
-        );
+        try
+        {
+            await _dapperDataAccess.SaveData<dynamic>(
+                "[dbo].[PaymentMetodsUpdate]",
+                parameters,
+                "DefaultConnection"
+            );
+        }
+        catch (SqlException ex) when (ex.Number == 2627) // Unique constraint error number
+        {
+            throw new InvalidOperationException(
+                $"a payment method with this name already exists: {paymentMetodCreateDto.MetodName}",
+                ex
+            );
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("An unexpected error occurred.", ex);
+        }
     }
 
     // Delete

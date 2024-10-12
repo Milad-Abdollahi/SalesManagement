@@ -36,12 +36,12 @@ public class PaymentMetodsController : ControllerBase
     }
 
     // Read
-
     // GET: api/MethodsController
     [HttpGet]
     public async Task<ActionResult<List<PaymentMetodModel>>> GetAllPaymentMethods()
     {
         var result = await _paymentMethodRepository.GetAllPaymentMetodsAsync();
+        //return StatusCode(500, "internal Server error");
         return Ok(result);
     }
 
@@ -61,11 +61,27 @@ public class PaymentMetodsController : ControllerBase
         [FromBody] PaymentMetodCreateDto paymentMethodCreateDto
     )
     {
-        await _paymentMethodRepository.UpdatePaymentMetodAsync(
-            paymentMethodId,
-            paymentMethodCreateDto
-        );
-        return Ok();
+        {
+            try
+            {
+                await _paymentMethodRepository.UpdatePaymentMetodAsync(
+                    paymentMethodId,
+                    paymentMethodCreateDto
+                );
+                return Ok(new { message = "Updated Successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new { message = "An unexpected error occurred.", details = ex.Message }
+                );
+            }
+        }
     }
 
     // DELETE api/PaymentMethods/5
