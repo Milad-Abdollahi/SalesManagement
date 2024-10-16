@@ -50,7 +50,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IDapperDataAccess, DapperDataAccess>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-builder.Services.AddScoped<IPaymentMetodRepository, PaymentMetodRepository>();
+builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 builder.Services.AddScoped<IPaymentStatusRepository, PaymentStatusRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();

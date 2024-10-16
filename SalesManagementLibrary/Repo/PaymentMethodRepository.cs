@@ -12,23 +12,23 @@ using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementLibrary.Repo;
 
-public class PaymentMetodRepository : IPaymentMetodRepository
+public class PaymentMethodRepository : IPaymentMethodRepository
 {
     private readonly IDapperDataAccess _dapperDataAccess;
 
-    public PaymentMetodRepository(IDapperDataAccess dapperDataAccess)
+    public PaymentMethodRepository(IDapperDataAccess dapperDataAccess)
     {
         _dapperDataAccess = dapperDataAccess;
     }
 
     // Create
-    public async Task<PaymentMetodModel?> CreatePaymentMetodAsync(
-        PaymentMetodCreateDto paymentMetodCreateDto
+    public async Task<PaymentMethodModel?> CreatePaymentMethodAsync(
+        PaymentMethodCreateDto paymentMethodCreateDto
     )
     {
-        var parameters = new { MetodName = paymentMetodCreateDto.MetodName };
-        var result = await _dapperDataAccess.LoadData<PaymentMetodModel?, dynamic>(
-            "[dbo].[PaymentMetodInsert]",
+        var parameters = new { MethodName = paymentMethodCreateDto.MethodName };
+        var result = await _dapperDataAccess.LoadData<PaymentMethodModel?, dynamic>(
+            "[dbo].[PaymentMethodInsert]",
             parameters,
             "DefaultConnection"
         );
@@ -37,20 +37,20 @@ public class PaymentMetodRepository : IPaymentMetodRepository
     }
 
     // Read
-    public async Task<List<PaymentMetodModel?>> GetAllPaymentMetodsAsync()
+    public async Task<List<PaymentMethodModel?>> GetAllPaymentMethodsAsync()
     {
-        var result = await _dapperDataAccess.LoadData<PaymentMetodModel?>(
-            "[dbo].[PaymentMetodsGetAll]",
+        var result = await _dapperDataAccess.LoadData<PaymentMethodModel?>(
+            "[dbo].[PaymentMethodsGetAll]",
             "DefaultConnection"
         );
 
         return result;
     }
 
-    public async Task<PaymentMetodModel?> GetPaymentMetodByIdAsync(int id)
+    public async Task<PaymentMethodModel?> GetPaymentMethodByIdAsync(int id)
     {
-        var result = await _dapperDataAccess.LoadData<PaymentMetodModel?, dynamic>(
-            "[dbo].[PaymentMetodsGetById]",
+        var result = await _dapperDataAccess.LoadData<PaymentMethodModel?, dynamic>(
+            "[dbo].[PaymentMethodsGetById]",
             new { Id = id },
             "DefaultConnection"
         );
@@ -59,14 +59,17 @@ public class PaymentMetodRepository : IPaymentMetodRepository
     }
 
     // Update
-    public async Task UpdatePaymentMetodAsync(int id, PaymentMetodCreateDto paymentMetodCreateDto)
+    public async Task UpdatePaymentMethodAsync(
+        int id,
+        PaymentMethodCreateDto paymentMethodCreateDto
+    )
     {
-        var parameters = new { Id = id, paymentMetodCreateDto.MetodName, };
+        var parameters = new { Id = id, paymentMethodCreateDto.MethodName, };
 
         try
         {
             await _dapperDataAccess.SaveData<dynamic>(
-                "[dbo].[PaymentMetodsUpdate]",
+                "[dbo].[PaymentMethodsUpdate]",
                 parameters,
                 "DefaultConnection"
             );
@@ -74,7 +77,7 @@ public class PaymentMetodRepository : IPaymentMetodRepository
         catch (SqlException ex) when (ex.Number == 2627) // Unique constraint error number
         {
             throw new InvalidOperationException(
-                $"a payment method with this name already exists: {paymentMetodCreateDto.MetodName}",
+                $"a payment method with this name already exists: {paymentMethodCreateDto.MethodName}",
                 ex
             );
         }
@@ -85,11 +88,11 @@ public class PaymentMetodRepository : IPaymentMetodRepository
     }
 
     // Delete
-    public Task DeletePaymentMetodAsync(int id)
+    public Task DeletePaymentMethodAsync(int id)
     {
         return _dapperDataAccess.SaveData<dynamic>(
-            "[dbo].[PaymentMetodsDelete]",
-            new { PaymentMetodId = id },
+            "[dbo].[PaymentMethodsDelete]",
+            new { PaymentMethodId = id },
             "DefaultConnection"
         );
     }

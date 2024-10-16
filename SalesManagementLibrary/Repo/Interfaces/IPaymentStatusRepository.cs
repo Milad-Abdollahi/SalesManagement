@@ -1,17 +1,19 @@
-﻿using SalesManagementLibrary.Models;
-using SalesManagementLibrary.Models.Dtos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SalesManagementLibrary.Models;
+using SalesManagementLibrary.Models.Dtos;
 
 namespace SalesManagementLibrary.Repo.Interfaces;
 
 public interface IPaymentStatusRepository
 {
     // Create
-    Task<PaymentStatusModel?> CreatePaymentStatusAsync(PaymentStatusCreateDto paymentStatusCreateDto);
+    Task<PaymentStatusModel?> CreatePaymentStatusAsync(
+        PaymentStatusCreateDto paymentStatusCreateDto
+    );
 
     // Read
     Task<List<PaymentStatusModel?>> GetAllPaymentStatusesAsync();
@@ -22,5 +24,4 @@ public interface IPaymentStatusRepository
 
     // Delete
     Task DeletePaymentStatusAsync(int id);
-
 }

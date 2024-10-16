@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SalesManagementLibrary.Models.Dtos;
 
-public class PaymentMetodCreateDto
+public class PaymentMethodCreateDto
 {
     [Required(ErrorMessage = "Method Name is required")]
-    public string MetodName { get; set; }
+    public string MethodName { get; set; }
 }

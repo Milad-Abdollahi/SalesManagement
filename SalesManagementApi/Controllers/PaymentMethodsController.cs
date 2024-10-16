@@ -9,11 +9,11 @@ namespace SalesManagementApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PaymentMetodsController : ControllerBase
+public class PaymentMethodsController : ControllerBase
 {
-    private readonly IPaymentMetodRepository _paymentMethodRepository;
+    private readonly IPaymentMethodRepository _paymentMethodRepository;
 
-    public PaymentMetodsController(IPaymentMetodRepository paymentMethodRepository)
+    public PaymentMethodsController(IPaymentMethodRepository paymentMethodRepository)
     {
         _paymentMethodRepository = paymentMethodRepository;
     }
@@ -21,11 +21,11 @@ public class PaymentMetodsController : ControllerBase
     // Create
     // POST api/PaymentMethods
     [HttpPost]
-    public async Task<ActionResult<PaymentMetodModel?>> CreatePaymentMethod(
-        [FromBody] PaymentMetodCreateDto paymentMethodCreateDto
+    public async Task<ActionResult<PaymentMethodModel?>> CreatePaymentMethod(
+        [FromBody] PaymentMethodCreateDto paymentMethodCreateDto
     )
     {
-        var paymentMethod = await _paymentMethodRepository.CreatePaymentMetodAsync(
+        var paymentMethod = await _paymentMethodRepository.CreatePaymentMethodAsync(
             paymentMethodCreateDto
         );
         if (paymentMethod == null)
@@ -38,18 +38,18 @@ public class PaymentMetodsController : ControllerBase
     // Read
     // GET: api/MethodsController
     [HttpGet]
-    public async Task<ActionResult<List<PaymentMetodModel>>> GetAllPaymentMethods()
+    public async Task<ActionResult<List<PaymentMethodModel>>> GetAllPaymentMethods()
     {
-        var result = await _paymentMethodRepository.GetAllPaymentMetodsAsync();
+        var result = await _paymentMethodRepository.GetAllPaymentMethodsAsync();
         //return StatusCode(500, "internal Server error");
         return Ok(result);
     }
 
     // GET api/PaymentMethods/5
     [HttpGet("{paymentMethodId}")]
-    public async Task<ActionResult<PaymentMetodModel>> Get(int paymentMethodId)
+    public async Task<ActionResult<PaymentMethodModel>> Get(int paymentMethodId)
     {
-        var result = await _paymentMethodRepository.GetPaymentMetodByIdAsync(paymentMethodId);
+        var result = await _paymentMethodRepository.GetPaymentMethodByIdAsync(paymentMethodId);
         return Ok(result);
     }
 
@@ -58,13 +58,13 @@ public class PaymentMetodsController : ControllerBase
     [HttpPut("{paymentMethodId}")]
     public async Task<ActionResult> Put(
         int paymentMethodId,
-        [FromBody] PaymentMetodCreateDto paymentMethodCreateDto
+        [FromBody] PaymentMethodCreateDto paymentMethodCreateDto
     )
     {
         {
             try
             {
-                await _paymentMethodRepository.UpdatePaymentMetodAsync(
+                await _paymentMethodRepository.UpdatePaymentMethodAsync(
                     paymentMethodId,
                     paymentMethodCreateDto
                 );
@@ -88,7 +88,7 @@ public class PaymentMetodsController : ControllerBase
     [HttpDelete("{paymentMethodId}")]
     public async Task<ActionResult> Delete(int paymentMethodId)
     {
-        await _paymentMethodRepository.DeletePaymentMetodAsync(paymentMethodId);
+        await _paymentMethodRepository.DeletePaymentMethodAsync(paymentMethodId);
         return Ok();
     }
 }

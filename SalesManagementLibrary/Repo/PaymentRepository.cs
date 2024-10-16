@@ -63,12 +63,12 @@ public class PaymentRepository : IPaymentRepository
 
         PaymentStatusModel? paymentStatus = paymentStatuses.FirstOrDefault();
 
-        var paymentMetods = await _dapperDataAccess.LoadData<PaymentMetodModel?, dynamic>(
+        var paymentMetods = await _dapperDataAccess.LoadData<PaymentMethodModel?, dynamic>(
             "[dbo].[PaymentMetodGetByPaymentId]",
             new { PaymentId = id },
             "DefaultConnection"
         );
-        PaymentMetodModel? paymentMetod = paymentMetods.FirstOrDefault();
+        PaymentMethodModel? paymentMetod = paymentMetods.FirstOrDefault();
 
         payment.PaymentStatus = paymentStatus;
         payment.PaymentMetod = paymentMetod;
@@ -115,10 +115,10 @@ public class PaymentRepository : IPaymentRepository
                 Id = dto.PaymentStatusId,
                 StatusName = dto.StatusName
             },
-            PaymentMetod = new PaymentMetodModel
+            PaymentMetod = new PaymentMethodModel
             {
                 Id = dto.PaymentMethodId,
-                MetodName = dto.MethodName,
+                MethodName = dto.MethodName,
             }
         };
     }

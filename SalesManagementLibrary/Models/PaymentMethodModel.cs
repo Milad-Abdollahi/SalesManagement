@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace SalesManagementLibrary.Models;
 
-public class PaymentMetodModel
+public class PaymentMethodModel
 {
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Method Name is required")]
-    public string? MetodName { get; set; }
+    public string? MethodName { get; set; }
 }
