@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,7 +58,10 @@ public class PaymentStatusRepository : IPaymentStatusRepository
     }
 
     // Update
-    public Task UpdatePaymentStatusAsync(int id, PaymentStatusCreateDto paymentStatusCreateDto)
+    public async Task UpdatePaymentStatusAsync(
+        int id,
+        PaymentStatusCreateDto paymentStatusCreateDto
+    )
     {
         var parameter = new
         {
@@ -65,11 +69,24 @@ public class PaymentStatusRepository : IPaymentStatusRepository
             StatusName = paymentStatusCreateDto.StatusName,
         };
 
-        return _dapperDataAccess.SaveData<dynamic>(
-            "[dbo].[PaymentStatusesUpdate]",
-            parameter,
-            "DefaultConnection"
-        );
+        try
+        {
+            await _dapperDataAccess.SaveData<dynamic>(
+                "[dbo].[PaymentStatusesUpdate]",
+                parameter,
+                "DefaultConnection"
+            );
+        }
+        catch (SqlException ex) when (ex.Number == 2627)
+        {
+            throw new InvalidOperationException(
+                $"A payment Status with this name already exists: {paymentStatusCreateDto.StatusName}"
+            );
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("An unexpected error occurred.", ex);
+        }
     }
 
     // Delete

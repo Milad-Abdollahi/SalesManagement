@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
 using SalesManagementLibrary.Repo.Interfaces;
-using System.Diagnostics.CodeAnalysis;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,13 +19,16 @@ public class PaymentStatusesController : ControllerBase
         _paymentStatusRepository = paymentStatusRepository;
     }
 
-
     // Create
     // POST api/<PaymentStatusesController>
     [HttpPost]
-    public async Task<ActionResult<PaymentStatusModel?>> Post(PaymentStatusCreateDto paymentStatusCreateDto)
+    public async Task<ActionResult<PaymentStatusModel?>> Post(
+        PaymentStatusCreateDto paymentStatusCreateDto
+    )
     {
-        var result = await _paymentStatusRepository.CreatePaymentStatusAsync(paymentStatusCreateDto);
+        var result = await _paymentStatusRepository.CreatePaymentStatusAsync(
+            paymentStatusCreateDto
+        );
 
         if (result == null)
         {
@@ -52,14 +55,33 @@ public class PaymentStatusesController : ControllerBase
         return Ok(result);
     }
 
-    
     // Update
     // PUT api/<PaymentStatusesController>/5
     [HttpPut("{paymentStatusId}")]
-    public async Task<ActionResult> Put(int paymentStatusId, [FromBody] PaymentStatusCreateDto paymentStatusCreateDto)
+    public async Task<ActionResult> Put(
+        int paymentStatusId,
+        [FromBody] PaymentStatusCreateDto paymentStatusCreateDto
+    )
     {
-        await _paymentStatusRepository.UpdatePaymentStatusAsync(paymentStatusId, paymentStatusCreateDto);
-        return Ok();
+        try
+        {
+            await _paymentStatusRepository.UpdatePaymentStatusAsync(
+                paymentStatusId,
+                paymentStatusCreateDto
+            );
+            return Ok(new { message = "Updated Successfully" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                500,
+                new { message = "An unexpected error occurred.", details = ex.Message }
+            );
+        }
     }
 
     // DELETE api/PaymentStatuses/5
