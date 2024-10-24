@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 using SalesManagementLibrary.DataAccess.Dapper;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
+using SalesManagementLibrary.Repo.BaseRepo;
 using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementLibrary.Repo;
 
-public class PaymentStatusRepository : IPaymentStatusRepository
+public class PaymentStatusRepository : BaseRepository, IPaymentStatusRepository
 {
     private readonly IDapperDataAccess _dapperDataAccess;
 
     public PaymentStatusRepository(IDapperDataAccess dapperDataAccess)
+    //: base(dapperDataAccess)
     {
         _dapperDataAccess = dapperDataAccess;
     }
@@ -25,14 +27,34 @@ public class PaymentStatusRepository : IPaymentStatusRepository
         PaymentStatusCreateDto paymentStatusCreateDto
     )
     {
-        var parameters = new { paymentStatusCreateDto.StatusName, };
+        var parameters = new { paymentStatusCreateDto.StatusName };
 
-        List<PaymentStatusModel> result = await _dapperDataAccess.LoadData<
-            PaymentStatusModel,
-            dynamic
-        >("[dbo].[PaymentStatusInsert]", parameters, "DefaultConnection");
-
-        return result.FirstOrDefault();
+        //try
+        //{
+        //    List<PaymentStatusModel> result = await _dapperDataAccess.LoadData<
+        //        PaymentStatusModel,
+        //        dynamic
+        //    >("[dbo].[PaymentStatusInsert]", parameters, "DefaultConnection");
+        //    return result.FirstOrDefault();
+        //}
+        //catch (SqlException ex) when (ex.Number == 2627)
+        //{
+        //    throw new InvalidOperationException(
+        //        $"A payment Status with this name already exists: {paymentStatusCreateDto.StatusName}"
+        //    );
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new InvalidOperationException("An unexpected error occurred.", ex);
+        //}
+        return await ExecuteWithHandling(async () =>
+        {
+            List<PaymentStatusModel> result = await _dapperDataAccess.LoadData<
+                PaymentStatusModel,
+                dynamic
+            >("[dbo].[PaymentStatusInsert]", parameters, "DefaultConnection");
+            return result.FirstOrDefault();
+        });
     }
 
     // Read

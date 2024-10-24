@@ -26,6 +26,12 @@ public class PaymentStatusesController : ControllerBase
         PaymentStatusCreateDto paymentStatusCreateDto
     )
     {
+        //ModelState.AddModelError(
+        //    nameof(paymentStatusCreateDto.StatusName),
+        //    "StatusName is not correct"
+        //);
+        //return ValidationProblem(ModelState);
+
         var result = await _paymentStatusRepository.CreatePaymentStatusAsync(
             paymentStatusCreateDto
         );

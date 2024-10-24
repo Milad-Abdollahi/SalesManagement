@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using SalesManagementApi.ExceptionHandling;
 using SalesManagementLibrary.DataAccess.Dapper;
 using SalesManagementLibrary.Repo;
 using SalesManagementLibrary.Repo.Interfaces;
@@ -19,7 +20,12 @@ builder.Services.AddCors(options =>
     );
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(
+//    options =>
+//{
+//    options.Filters.Add(new ValidateModelAttribute());
+//}
+);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -68,6 +74,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("AllowSpecificOrigin");
+
+// Add cutom exception handling middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 //app.UseAuthentication();
 
