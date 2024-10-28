@@ -18,7 +18,7 @@ public class BaseRepository
     //    _dapperDataAccess = dapperDataAccess;
     //}
 
-    protected async Task ExecuteWithHandling(Func<Task> action)
+    protected async Task ExecWithErrHandling(Func<Task> action)
     {
         try
         {
@@ -34,7 +34,7 @@ public class BaseRepository
         }
     }
 
-    protected async Task<T> ExecuteWithHandling<T>(Func<Task<T>> action)
+    protected async Task<T> ExecWithErrHandling<T>(Func<Task<T>> action)
     {
         try
         {
