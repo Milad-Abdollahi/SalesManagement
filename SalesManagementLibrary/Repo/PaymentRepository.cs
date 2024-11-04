@@ -71,7 +71,7 @@ public class PaymentRepository : IPaymentRepository
         PaymentMethodModel? paymentMetod = paymentMetods.FirstOrDefault();
 
         payment.PaymentStatus = paymentStatus;
-        payment.PaymentMetod = paymentMetod;
+        payment.PaymentMethod = paymentMetod;
 
         return payment;
     }
@@ -115,7 +115,7 @@ public class PaymentRepository : IPaymentRepository
                 Id = dto.PaymentStatusId,
                 StatusName = dto.StatusName
             },
-            PaymentMetod = new PaymentMethodModel
+            PaymentMethod = new PaymentMethodModel
             {
                 Id = dto.PaymentMethodId,
                 MethodName = dto.MethodName,

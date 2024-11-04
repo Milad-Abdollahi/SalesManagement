@@ -11,17 +11,15 @@ namespace SalesManagementLibrary.Repo.Interfaces;
 public interface IPaymentStatusRepository
 {
     // Create
-    Task<PaymentStatusModel?> CreatePaymentStatusAsync(
-        PaymentStatusCreateDto paymentStatusCreateDto
-    );
+    Task<PaymentStatusModel?> CreateAsync(PaymentStatusCreateDto paymentStatusCreateDto);
 
     // Read
-    Task<List<PaymentStatusModel?>> GetAllPaymentStatusesAsync();
-    Task<PaymentStatusModel?> GetPaymentStatusByIdAsync(int id);
+    Task<List<PaymentStatusModel?>> GetAllAsync();
+    Task<PaymentStatusModel?> GetByIdAsync(int id);
 
     // Update
-    Task UpdatePaymentStatusAsync(int id, PaymentStatusCreateDto paymentStatusCreateDto);
+    Task UpdateAsync(int id, PaymentStatusCreateDto paymentStatusCreateDto);
 
     // Delete
-    Task DeletePaymentStatusAsync(int id);
+    Task DeleteAsync(int id);
 }

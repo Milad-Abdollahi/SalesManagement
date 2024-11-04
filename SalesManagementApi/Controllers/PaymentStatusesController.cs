@@ -26,20 +26,7 @@ public class PaymentStatusesController : ControllerBase
         PaymentStatusCreateDto paymentStatusCreateDto
     )
     {
-        //ModelState.AddModelError(
-        //    nameof(paymentStatusCreateDto.StatusName),
-        //    "StatusName is not correct"
-        //);
-        //return ValidationProblem(ModelState);
-
-        var result = await _paymentStatusRepository.CreatePaymentStatusAsync(
-            paymentStatusCreateDto
-        );
-
-        if (result == null)
-        {
-            return BadRequest("Payment Method Creation Failed!");
-        }
+        var result = await _paymentStatusRepository.CreateAsync(paymentStatusCreateDto);
 
         return Ok(result);
     }
@@ -49,7 +36,7 @@ public class PaymentStatusesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<PaymentStatusModel>>> Get()
     {
-        var result = await _paymentStatusRepository.GetAllPaymentStatusesAsync();
+        var result = await _paymentStatusRepository.GetAllAsync();
         return Ok(result);
     }
 
@@ -57,7 +44,7 @@ public class PaymentStatusesController : ControllerBase
     [HttpGet("{paymentStatusId}")]
     public async Task<ActionResult<PaymentStatusModel>> Get(int paymentStatusId)
     {
-        var result = await _paymentStatusRepository.GetPaymentStatusByIdAsync(paymentStatusId);
+        var result = await _paymentStatusRepository.GetByIdAsync(paymentStatusId);
         return Ok(result);
     }
 
@@ -69,32 +56,15 @@ public class PaymentStatusesController : ControllerBase
         [FromBody] PaymentStatusCreateDto paymentStatusCreateDto
     )
     {
-        try
-        {
-            await _paymentStatusRepository.UpdatePaymentStatusAsync(
-                paymentStatusId,
-                paymentStatusCreateDto
-            );
-            return Ok(new { message = "Updated Successfully" });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                500,
-                new { message = "An unexpected error occurred.", details = ex.Message }
-            );
-        }
+        await _paymentStatusRepository.UpdateAsync(paymentStatusId, paymentStatusCreateDto);
+        return Ok(new { message = "Updated Successfully" });
     }
 
     // DELETE api/PaymentStatuses/5
     [HttpDelete("{paymentStatusId}")]
     public async Task<ActionResult> Delete(int paymentStatusId)
     {
-        await _paymentStatusRepository.DeletePaymentStatusAsync(paymentStatusId);
-        return Ok();
+        await _paymentStatusRepository.DeleteAsync(paymentStatusId);
+        return Ok(new { message = "Deleted Successfully" });
     }
 }

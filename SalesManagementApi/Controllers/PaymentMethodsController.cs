@@ -25,9 +25,7 @@ public class PaymentMethodsController : ControllerBase
         [FromBody] PaymentMethodCreateDto paymentMethodCreateDto
     )
     {
-        var paymentMethod = await _paymentMethodRepository.CreatePaymentMethodAsync(
-            paymentMethodCreateDto
-        );
+        var paymentMethod = await _paymentMethodRepository.CreateAsync(paymentMethodCreateDto);
         if (paymentMethod == null)
         {
             return BadRequest();
@@ -40,7 +38,7 @@ public class PaymentMethodsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<PaymentMethodModel>>> GetAllPaymentMethods()
     {
-        var result = await _paymentMethodRepository.GetAllPaymentMethodsAsync();
+        var result = await _paymentMethodRepository.GetAllAsync();
         //return StatusCode(500, "internal Server error");
         return Ok(result);
     }
@@ -49,7 +47,7 @@ public class PaymentMethodsController : ControllerBase
     [HttpGet("{paymentMethodId}")]
     public async Task<ActionResult<PaymentMethodModel>> Get(int paymentMethodId)
     {
-        var result = await _paymentMethodRepository.GetPaymentMethodByIdAsync(paymentMethodId);
+        var result = await _paymentMethodRepository.GetByIdAsync(paymentMethodId);
         return Ok(result);
     }
 
@@ -64,10 +62,7 @@ public class PaymentMethodsController : ControllerBase
         {
             try
             {
-                await _paymentMethodRepository.UpdatePaymentMethodAsync(
-                    paymentMethodId,
-                    paymentMethodCreateDto
-                );
+                await _paymentMethodRepository.UpdateAsync(paymentMethodId, paymentMethodCreateDto);
                 return Ok(new { message = "Updated Successfully" });
             }
             catch (InvalidOperationException ex)
@@ -88,7 +83,7 @@ public class PaymentMethodsController : ControllerBase
     [HttpDelete("{paymentMethodId}")]
     public async Task<ActionResult> Delete(int paymentMethodId)
     {
-        await _paymentMethodRepository.DeletePaymentMethodAsync(paymentMethodId);
+        await _paymentMethodRepository.DeleteAsync(paymentMethodId);
         return Ok();
     }
 }

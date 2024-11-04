@@ -56,7 +56,7 @@ public class CustomerTypesController : ControllerBase
             customerTypeId,
             customerTypeCreateDto
         );
-        return Ok();
+        return Ok(new { message = "Updated Successfully" });
     }
 
     // Delete

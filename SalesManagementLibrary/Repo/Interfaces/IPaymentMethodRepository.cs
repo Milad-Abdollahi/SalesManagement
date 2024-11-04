@@ -11,17 +11,15 @@ namespace SalesManagementLibrary.Repo.Interfaces;
 public interface IPaymentMethodRepository
 {
     // Create
-    Task<PaymentMethodModel?> CreatePaymentMethodAsync(
-        PaymentMethodCreateDto paymentMethodCreateDto
-    );
+    Task<PaymentMethodModel?> CreateAsync(PaymentMethodCreateDto paymentMethodCreateDto);
 
     // Read
-    Task<List<PaymentMethodModel?>> GetAllPaymentMethodsAsync();
-    Task<PaymentMethodModel?> GetPaymentMethodByIdAsync(int id);
+    Task<List<PaymentMethodModel?>> GetAllAsync();
+    Task<PaymentMethodModel?> GetByIdAsync(int id);
 
     // Update
-    Task UpdatePaymentMethodAsync(int id, PaymentMethodCreateDto paymentMethodCreateDto);
+    Task UpdateAsync(int id, PaymentMethodCreateDto paymentMethodCreateDto);
 
     // Delete
-    Task DeletePaymentMethodAsync(int id);
+    Task DeleteAsync(int id);
 }

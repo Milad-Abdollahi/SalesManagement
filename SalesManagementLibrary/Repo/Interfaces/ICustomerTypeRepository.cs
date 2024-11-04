@@ -14,7 +14,6 @@ public interface ICustomerTypeRepository
     Task<CustomerTypeModel?> CreateCustomerTypeAsync(CustomerTypeCreateDto customerTypeCreateDto);
 
     // Reade
-
     Task<List<CustomerTypeModel?>> GetAllCustomerTypesAsync();
     Task<CustomerTypeModel?> GetCustomerTypeByIdAsync(int id);
 

@@ -22,7 +22,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
     // Create
-    public async Task<PaymentMethodModel?> CreatePaymentMethodAsync(
+    public async Task<PaymentMethodModel?> CreateAsync(
         PaymentMethodCreateDto paymentMethodCreateDto
     )
     {
@@ -37,7 +37,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
     // Read
-    public async Task<List<PaymentMethodModel?>> GetAllPaymentMethodsAsync()
+    public async Task<List<PaymentMethodModel?>> GetAllAsync()
     {
         var result = await _dapperDataAccess.LoadData<PaymentMethodModel?>(
             "[dbo].[PaymentMethodsGetAll]",
@@ -47,7 +47,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
         return result;
     }
 
-    public async Task<PaymentMethodModel?> GetPaymentMethodByIdAsync(int id)
+    public async Task<PaymentMethodModel?> GetByIdAsync(int id)
     {
         var result = await _dapperDataAccess.LoadData<PaymentMethodModel?, dynamic>(
             "[dbo].[PaymentMethodsGetById]",
@@ -59,10 +59,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
     // Update
-    public async Task UpdatePaymentMethodAsync(
-        int id,
-        PaymentMethodCreateDto paymentMethodCreateDto
-    )
+    public async Task UpdateAsync(int id, PaymentMethodCreateDto paymentMethodCreateDto)
     {
         var parameters = new { Id = id, paymentMethodCreateDto.MethodName, };
 
@@ -88,7 +85,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
     }
 
     // Delete
-    public Task DeletePaymentMethodAsync(int id)
+    public Task DeleteAsync(int id)
     {
         return _dapperDataAccess.SaveData<dynamic>(
             "[dbo].[PaymentMethodsDelete]",
