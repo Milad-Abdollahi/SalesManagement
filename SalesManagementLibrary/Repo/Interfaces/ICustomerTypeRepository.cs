@@ -11,15 +11,16 @@ namespace SalesManagementLibrary.Repo.Interfaces;
 public interface ICustomerTypeRepository
 {
     // Create
-    Task<CustomerTypeModel?> CreateCustomerTypeAsync(CustomerTypeCreateDto customerTypeCreateDto);
+    Task<CustomerTypeModel?> CreateAsync(CustomerTypeCreateDto customerTypeCreateDto);
 
     // Reade
-    Task<List<CustomerTypeModel?>> GetAllCustomerTypesAsync();
-    Task<CustomerTypeModel?> GetCustomerTypeByIdAsync(int id);
+    Task<List<CustomerTypeModel?>> GetAllAsync();
+    Task<CustomerTypeModel?> GetByIdAsync(int id);
 
     // Update
-    Task UpdateCustomerTypeAsync(int Id, CustomerTypeCreateDto customerTypeCreateDto);
+    Task UpdateAsync(int Id, CustomerTypeCreateDto customerTypeCreateDto);
 
     // Delete
-    Task DeleteCustomerTypeAsync(int Id);
+    Task DeleteAsync(int Id);
+
 }

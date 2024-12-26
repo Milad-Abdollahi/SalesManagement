@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SalesManagementLibrary.Models.Dtos;
-
+// Todo**: Check if this class is actually used anywhere!
 public class PaymentDto
 {
     public int PaymentId { get; set; }

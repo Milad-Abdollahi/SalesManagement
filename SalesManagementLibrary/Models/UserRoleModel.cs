@@ -15,4 +15,5 @@ public class UserRoleModel
     //[Required]
     //[StringLength(50)]
     public string RoleName { get; set; }
+
 }

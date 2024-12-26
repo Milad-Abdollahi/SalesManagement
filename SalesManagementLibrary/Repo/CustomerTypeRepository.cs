@@ -11,7 +11,7 @@ using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementLibrary.Repo;
 
-public class CustomerTypeRepository : BaseRepository, ICustomerTypeRepository
+public class CustomerTypeRepository : BaseRepository, IEntityRepository<CustomerTypeModel, CustomerTypeCreateDto>
 {
     private readonly IDapperDataAccess _dapperDataAccess;
 
@@ -21,7 +21,7 @@ public class CustomerTypeRepository : BaseRepository, ICustomerTypeRepository
     }
 
     // Create
-    public async Task<CustomerTypeModel?> CreateCustomerTypeAsync(
+    public async Task<CustomerTypeModel?> CreateAsync(
         CustomerTypeCreateDto customerTypeCreateDto
     )
     {
@@ -38,7 +38,7 @@ public class CustomerTypeRepository : BaseRepository, ICustomerTypeRepository
     }
 
     // Read
-    public async Task<List<CustomerTypeModel?>> GetAllCustomerTypesAsync()
+    public async Task<List<CustomerTypeModel?>> GetAllAsync()
     {
         return await ExecWithErrHandling(async () =>
         {
@@ -51,7 +51,7 @@ public class CustomerTypeRepository : BaseRepository, ICustomerTypeRepository
         });
     }
 
-    public async Task<CustomerTypeModel?> GetCustomerTypeByIdAsync(int id)
+    public async Task<CustomerTypeModel?> GetByIdAsync(int id)
     {
         return await ExecWithErrHandling<CustomerTypeModel?>(async () =>
         {
@@ -65,7 +65,7 @@ public class CustomerTypeRepository : BaseRepository, ICustomerTypeRepository
     }
 
     // Update
-    public async Task UpdateCustomerTypeAsync(int id, CustomerTypeCreateDto customerTypeCreateDto)
+    public async Task UpdateAsync(int id, CustomerTypeCreateDto customerTypeCreateDto)
     {
         await ExecWithErrHandling(async () =>
         {
@@ -79,7 +79,7 @@ public class CustomerTypeRepository : BaseRepository, ICustomerTypeRepository
     }
 
     // Delete
-    public async Task DeleteCustomerTypeAsync(int id)
+    public async Task DeleteAsync(int id)
     {
         await ExecWithErrHandling(async () =>
         {

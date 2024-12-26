@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using SalesManagementApi.ExceptionHandling;
 using SalesManagementLibrary.DataAccess.Dapper;
+using SalesManagementLibrary.Models;
+using SalesManagementLibrary.Models.Dtos;
 using SalesManagementLibrary.Repo;
 using SalesManagementLibrary.Repo.Interfaces;
 
@@ -60,7 +62,8 @@ builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 builder.Services.AddScoped<IPaymentStatusRepository, PaymentStatusRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-builder.Services.AddScoped<ICustomerTypeRepository, CustomerTypeRepository>();
+builder.Services.AddScoped<IEntityRepository<CustomerTypeModel, CustomerTypeCreateDto>, CustomerTypeRepository>();
+
 
 var app = builder.Build();
 

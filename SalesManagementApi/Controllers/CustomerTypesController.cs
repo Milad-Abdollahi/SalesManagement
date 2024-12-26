@@ -10,9 +10,9 @@ namespace SalesManagementApi.Controllers;
 [ApiController]
 public class CustomerTypesController : ControllerBase
 {
-    private readonly ICustomerTypeRepository _customerTypeRepository;
+    private readonly IEntityRepository<CustomerTypeModel, CustomerTypeCreateDto> _customerTypeRepository;
 
-    public CustomerTypesController(ICustomerTypeRepository customerTypeRepository)
+    public CustomerTypesController(IEntityRepository<CustomerTypeModel, CustomerTypeCreateDto> customerTypeRepository)
     {
         _customerTypeRepository = customerTypeRepository;
     }
@@ -23,7 +23,7 @@ public class CustomerTypesController : ControllerBase
         CustomerTypeCreateDto customerTypeCreateDto
     )
     {
-        var result = await _customerTypeRepository.CreateCustomerTypeAsync(customerTypeCreateDto);
+        var result = await _customerTypeRepository.CreateAsync(customerTypeCreateDto);
 
         return Ok(result);
     }
@@ -33,7 +33,7 @@ public class CustomerTypesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<CustomerTypeModel?>>> GetAllCustomerTypes()
     {
-        var result = await _customerTypeRepository.GetAllCustomerTypesAsync();
+        var result = await _customerTypeRepository.GetAllAsync();
 
         return Ok(result);
     }
@@ -41,7 +41,7 @@ public class CustomerTypesController : ControllerBase
     [HttpGet("{customerTypeId}")]
     public async Task<ActionResult<CustomerTypeModel?>> GetCustomerTypeById(int customerTypeId)
     {
-        var result = await _customerTypeRepository.GetCustomerTypeByIdAsync(customerTypeId);
+        var result = await _customerTypeRepository.GetByIdAsync(customerTypeId);
         return Ok(result);
     }
 
@@ -52,7 +52,7 @@ public class CustomerTypesController : ControllerBase
         [FromBody] CustomerTypeCreateDto customerTypeCreateDto
     )
     {
-        await _customerTypeRepository.UpdateCustomerTypeAsync(
+        await _customerTypeRepository.UpdateAsync(
             customerTypeId,
             customerTypeCreateDto
         );
@@ -64,7 +64,7 @@ public class CustomerTypesController : ControllerBase
     [HttpDelete("{customerTypeId}")]
     public async Task<ActionResult> DeleteCustomerType(int customerTypeId)
     {
-        await _customerTypeRepository.DeleteCustomerTypeAsync(customerTypeId);
+        await _customerTypeRepository.DeleteAsync(customerTypeId);
         return Ok();
     }
 }
