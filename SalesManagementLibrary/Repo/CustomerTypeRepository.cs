@@ -21,17 +21,16 @@ public class CustomerTypeRepository : BaseRepository, IEntityRepository<Customer
     }
 
     // Create
-    public async Task<CustomerTypeModel?> CreateAsync(
-        CustomerTypeCreateDto customerTypeCreateDto
-    )
+    public async Task<CustomerTypeModel?> CreateAsync(CustomerTypeCreateDto customerTypeCreateDto)
     {
         return await ExecWithErrHandling<CustomerTypeModel?>(async () =>
         {
             var parameter = new { TypeName = customerTypeCreateDto.TypeName };
-            List<CustomerTypeModel?> result = await _dapperDataAccess.LoadData<
-                CustomerTypeModel?,
-                dynamic
-            >("[dbo].[CustomerTypeInsert]", parameter, "DefaultConnection");
+            List<CustomerTypeModel?> result = await _dapperDataAccess.LoadData<CustomerTypeModel?, dynamic>(
+                "[dbo].[CustomerTypeInsert]",
+                parameter,
+                "DefaultConnection"
+            );
 
             return result.FirstOrDefault();
         });
@@ -64,17 +63,27 @@ public class CustomerTypeRepository : BaseRepository, IEntityRepository<Customer
         });
     }
 
+    private CustomerModel MapDetialDtoToModel(CustomerDetailDto detailDto)
+    {
+        return new CustomerModel
+        {
+            Id = detailDto.Id,
+            Name = detailDto.Name,
+            Email = detailDto.Email,
+            Phone = detailDto.Phone,
+            Address = detailDto.Address,
+            CustomerType = new CustomerTypeModel { Id = detailDto.CustomerTypeId, TypeName = detailDto.TypeName, },
+            CreatedDate = detailDto.CreatedDate,
+        };
+    }
+
     // Update
     public async Task UpdateAsync(int id, CustomerTypeCreateDto customerTypeCreateDto)
     {
         await ExecWithErrHandling(async () =>
         {
             var parameter = new { CustomerTypeId = id, TypeName = customerTypeCreateDto.TypeName };
-            await _dapperDataAccess.SaveData<dynamic>(
-                "[dbo].[CustomerTypesUpdate]",
-                parameter,
-                "DefaultConnection"
-            );
+            await _dapperDataAccess.SaveData<dynamic>("[dbo].[CustomerTypesUpdate]", parameter, "DefaultConnection");
         });
     }
 

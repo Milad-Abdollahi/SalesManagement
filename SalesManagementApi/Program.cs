@@ -63,6 +63,7 @@ builder.Services.AddScoped<IPaymentStatusRepository, PaymentStatusRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 builder.Services.AddScoped<IEntityRepository<CustomerTypeModel, CustomerTypeCreateDto>, CustomerTypeRepository>();
+builder.Services.AddScoped<IEntityRepository<CustomerModel, CustomerCreateDto>, CustomerRepository>();
 
 
 var app = builder.Build();

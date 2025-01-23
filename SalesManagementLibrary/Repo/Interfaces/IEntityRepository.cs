@@ -17,7 +17,7 @@ namespace SalesManagementLibrary.Repo.Interfaces
         Task<TReturn> GetByIdAsync(int id);
 
         // Update
-        Task UpdateAsync(int id, UDto creteDto);
+        Task UpdateAsync(int id, UDto createDto);
 
         // Delete
         Task DeleteAsync(int id);

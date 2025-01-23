@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
 using SalesManagementLibrary.Repo.Interfaces;
@@ -19,9 +18,7 @@ public class CustomerTypesController : ControllerBase
 
     // Create
     [HttpPost]
-    public async Task<ActionResult<CustomerTypeModel?>> Post(
-        CustomerTypeCreateDto customerTypeCreateDto
-    )
+    public async Task<ActionResult<CustomerTypeModel?>> Post(CustomerTypeCreateDto customerTypeCreateDto)
     {
         var result = await _customerTypeRepository.CreateAsync(customerTypeCreateDto);
 
@@ -46,16 +43,14 @@ public class CustomerTypesController : ControllerBase
     }
 
     // Update
+
     [HttpPut("{customerTypeId}")]
     public async Task<ActionResult> UpdateCustomerType(
         int customerTypeId,
         [FromBody] CustomerTypeCreateDto customerTypeCreateDto
     )
     {
-        await _customerTypeRepository.UpdateAsync(
-            customerTypeId,
-            customerTypeCreateDto
-        );
+        await _customerTypeRepository.UpdateAsync(customerTypeId, customerTypeCreateDto);
         return Ok(new { message = "Updated Successfully" });
     }
 

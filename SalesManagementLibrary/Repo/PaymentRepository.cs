@@ -27,7 +27,7 @@ public class PaymentRepository : IPaymentRepository
             OrderId = paymentCreateDto.OrderId,
             PaymentDate = paymentCreateDto.PaymentDate,
             Amount = paymentCreateDto.Amount,
-            PaymentMethodId = paymentCreateDto.PaymentMetod.Id,
+            PaymentMethodId = paymentCreateDto.PaymentMethod.Id,
             PaymentStatusId = paymentCreateDto.PaymentStatus.Id,
         };
         var result = await _dapperDataAccess.LoadData<PaymentModel?, dynamic>(
@@ -40,6 +40,19 @@ public class PaymentRepository : IPaymentRepository
 
     // Read
 
+    public async Task<List<PaymentModel?>> GetAllPaymentsAsync()
+    {
+        List<PaymentDetailDto?> paymentDtos = await this.GetAllPaymentDetailsDtosAsync();
+
+        List<PaymentModel> payments = new List<PaymentModel>();
+
+        foreach (var paymentDto in paymentDtos)
+        {
+            payments.Add(this.MapDtoToModel(paymentDto));
+        }
+
+        return payments;
+    }
     public async Task<PaymentModel?> GetPaymentByIdAsync(int id)
     {
         var payments = await _dapperDataAccess.LoadData<PaymentModel?, dynamic>(
@@ -76,33 +89,19 @@ public class PaymentRepository : IPaymentRepository
         return payment;
     }
 
-    public async Task<List<PaymentModel?>> GetAllPaymentsAsync()
+    private async Task<List<PaymentDetailDto?>> GetAllPaymentDetailsDtosAsync()
     {
-        List<PaymentDto?> paymentDtos = await this.GetAllPaymentsWithDetailsAsync();
+        var spName = "[dbo].[PaymentsGetAllWithDetails]";
 
-        List<PaymentModel> payments = new List<PaymentModel>();
-
-        foreach (var paymentDto in paymentDtos)
-        {
-            payments.Add(this.MapDtoToModel(paymentDto));
-        }
-
-        return payments;
-    }
-
-    private async Task<List<PaymentDto?>> GetAllPaymentsWithDetailsAsync()
-    {
-        var sql = "[dbo].[PaymentsGetAllWithDetails]";
-
-        List<PaymentDto?> payments = await _dapperDataAccess.LoadData<PaymentDto>(
-            sql,
+        List<PaymentDetailDto?> paymentsDetailDtos = await _dapperDataAccess.LoadData<PaymentDetailDto>(
+            spName,
             "DefaultConnection"
         );
 
-        return payments;
+        return paymentsDetailDtos;
     }
 
-    private PaymentModel MapDtoToModel(PaymentDto dto)
+    private PaymentModel MapDtoToModel(PaymentDetailDto dto)
     {
         return new PaymentModel
         {
@@ -132,7 +131,7 @@ public class PaymentRepository : IPaymentRepository
             OrderId = paymentCreateDto.OrderId,
             PaymentDate = paymentCreateDto.PaymentDate,
             Amount = paymentCreateDto.Amount,
-            PaymentMethodId = paymentCreateDto.PaymentMetod.Id,
+            PaymentMethodId = paymentCreateDto.PaymentMethod.Id,
             PaymentStatusId = paymentCreateDto.PaymentStatus.Id,
         };
 

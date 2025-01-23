@@ -8,9 +8,10 @@ namespace SalesManagementLibrary.Models.Dtos;
 
 public class PaymentCreateDto
 {
+
     public int OrderId { get; set; }
     public DateTime PaymentDate { get; set; }
     public decimal Amount { get; set; }
     public PaymentStatusModel PaymentStatus { get; set; }
-    public PaymentMethodModel PaymentMetod { get; set; }
+    public PaymentMethodModel PaymentMethod { get; set; }
 }
