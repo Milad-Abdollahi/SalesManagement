@@ -9,9 +9,7 @@ using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementLibrary.Repo;
 
-public class CustomerRepository
-    : BaseRepository,
-        IEntityRepository<CustomerModel, CustomerCreateDto>
+public class CustomerRepository : BaseRepository, IEntityRepository<CustomerModel, CustomerCreateDto>
 {
     private readonly IDapperDataAccess _dapperDataAccess;
 
@@ -31,14 +29,15 @@ public class CustomerRepository
                 Email = createDto.Email,
                 Phone = createDto.Phone,
                 Address = createDto.Address,
-                CustomerTypeId = createDto.CustomerType.Id,
+                CustomerTypeId = createDto.CustomerType_id,
                 CreatedDate = DateTime.Now
             };
 
-            List<CustomerDetailDto?> results = await _dapperDataAccess.LoadData<
-                CustomerDetailDto?,
-                dynamic
-            >("[dbo].[CustomerInsert]", parameter, "DefaultConnection");
+            List<CustomerDetailDto?> results = await _dapperDataAccess.LoadData<CustomerDetailDto?, dynamic>(
+                "[dbo].[CustomerInsert]",
+                parameter,
+                "DefaultConnection"
+            );
 
             var customer = this.MapDetailDtoToModel(results.FirstOrDefault());
 
@@ -51,8 +50,7 @@ public class CustomerRepository
     {
         return await ExecWithErrHandling<List<CustomerModel?>>(async () =>
         {
-            List<CustomerDetailDto?> customerDetailDtos =
-                await this.GetAllCustomerDetailDtosAsync();
+            List<CustomerDetailDto?> customerDetailDtos = await this.GetAllCustomerDetailDtosAsync();
             List<CustomerModel> customers = new List<CustomerModel>();
 
             foreach (var item in customerDetailDtos)
@@ -66,8 +64,7 @@ public class CustomerRepository
 
     public async Task<CustomerModel?> GetByIdAsync(int id)
     {
-        CustomerDetailDto? customerDetailDto =
-            await this.GetByIdCustomerDetailDtoAsync(id);
+        CustomerDetailDto? customerDetailDto = await this.GetByIdCustomerDetailDtoAsync(id);
         if (customerDetailDto == null)
         {
             return null;
@@ -79,10 +76,7 @@ public class CustomerRepository
     private async Task<List<CustomerDetailDto?>> GetAllCustomerDetailDtosAsync()
     {
         var spName = "[dbo].[CustomersGetAllDetails]";
-        var result = await _dapperDataAccess.LoadData<CustomerDetailDto>(
-            spName,
-            "DefaultConnection"
-        );
+        var result = await _dapperDataAccess.LoadData<CustomerDetailDto>(spName, "DefaultConnection");
         return result;
     }
 
@@ -90,16 +84,15 @@ public class CustomerRepository
     private async Task<CustomerDetailDto?> GetByIdCustomerDetailDtoAsync(int id)
     {
         var parameter = new { CustomerId = id };
-        List<CustomerDetailDto?> result = await _dapperDataAccess.LoadData<
-            CustomerDetailDto?,
-            dynamic
-        >("[dbo].[CustomersGetByIdDetails]", parameter, "DefaultConnection");
+        List<CustomerDetailDto?> result = await _dapperDataAccess.LoadData<CustomerDetailDto?, dynamic>(
+            "[dbo].[CustomersGetByIdDetails]",
+            parameter,
+            "DefaultConnection"
+        );
         return result.FirstOrDefault();
     }
 
-    private CustomerModel MapDetailDtoToModel(
-        CustomerDetailDto customerDetailDto
-    )
+    private CustomerModel MapDetailDtoToModel(CustomerDetailDto customerDetailDto)
     {
         return new CustomerModel
         {
@@ -129,15 +122,11 @@ public class CustomerRepository
                 Email = createDto.Email,
                 Phone = createDto.Phone,
                 Address = createDto.Address,
-                CustomerTypeId = createDto.CustomerType.Id,
+                CustomerTypeId = createDto.CustomerType_id,
                 CreatedDate = createDto.CreatedDate
             };
 
-            await _dapperDataAccess.SaveData<dynamic>(
-                "[dbo].[CustomersUpdate]",
-                parameter,
-                "DefaultConnection"
-            );
+            await _dapperDataAccess.SaveData<dynamic>("[dbo].[CustomersUpdate]", parameter, "DefaultConnection");
         });
     }
 
@@ -147,11 +136,7 @@ public class CustomerRepository
         await ExecWithErrHandling(async () =>
         {
             var parameter = new { CustomerId = id };
-            await _dapperDataAccess.SaveData<dynamic>(
-                "[dbo].[CustomerDelete]",
-                parameter,
-                "DefaultConnection"
-            );
+            await _dapperDataAccess.SaveData<dynamic>("[dbo].[CustomerDelete]", parameter, "DefaultConnection");
         });
     }
 }

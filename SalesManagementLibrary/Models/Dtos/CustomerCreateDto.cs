@@ -11,6 +11,6 @@ public class CustomerCreateDto
     public string Address { get; set; }
 
     // Todo**: Change this class later so it only includes CustomerTypeId instead of CustomerTypeModel
-    public CustomerTypeModel CustomerType { get; set; }
+    public int CustomerType_id { get; set; }
     public DateTime CreatedDate { get; set; }
 }
