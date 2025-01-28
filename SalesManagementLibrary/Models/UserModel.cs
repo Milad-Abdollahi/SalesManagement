@@ -12,25 +12,22 @@ public class UserModel
     //[Key]
     public int Id { get; set; }
 
-
     //[Required]
     //[StringLength(50)]
     public string? Username { get; set; }
-
 
     //[Required]
     [StringLength(256)]
     public string PasswordHash { get; set; }
 
-
     //[Required]
     //[StringLength(100)]
     public string Email { get; set; }
 
-
     //[Required]
-    public int RoleId { get; set; }
-
+    //public int RoleId { get; set; }
+    public List<string> Roles { get; set; } = [];
+    public List<UserClaimModel> Claims { get; set; } = [];
 
     //[Required]
     public DateTime CreatedDate { get; set; }

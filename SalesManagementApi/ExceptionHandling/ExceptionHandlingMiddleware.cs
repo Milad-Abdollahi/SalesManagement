@@ -1,10 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SalesManagementLibrary.Exceptions;
 
 namespace SalesManagementApi.ExceptionHandling;

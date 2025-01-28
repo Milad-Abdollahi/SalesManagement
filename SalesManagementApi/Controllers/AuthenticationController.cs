@@ -2,9 +2,10 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SalesManagementLibrary.Models;
+using SalesManagementLibrary.Models.Dtos;
 using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementApi.Controllers;
@@ -34,7 +35,7 @@ public class AuthenticationController : ControllerBase
 
         if (user == null)
         {
-            return Unauthorized();
+            return Unauthorized("نام کاربری یا رمز عبور یافت نشد");
         }
 
         string token = GenerateToken(user);
@@ -72,24 +73,9 @@ public class AuthenticationController : ControllerBase
 
         if (user != null && BCrypt.Net.BCrypt.Verify(authData.Password, user.PasswordHash))
         {
-            return new UserData(user.Id, user.Username);
+            return new UserData(user.Id, user.Username!);
         }
 
         return null;
     }
-
-    // Depricated
-
-    //private bool CompareValues(string? actual, string expected)
-    //{
-    //    if (actual is not null)
-    //    {
-    //        if (actual.Equals(expected))
-    //        {
-    //            return true;
-    //        }
-    //    }
-
-    //    return false;
-    //}
 }

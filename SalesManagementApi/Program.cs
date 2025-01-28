@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SalesManagementApi.ExceptionHandling;
 using SalesManagementLibrary.DataAccess.Dapper;
 using SalesManagementLibrary.Models;
@@ -29,33 +30,67 @@ builder.Services.AddControllers(
 //}
 );
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sales Management Api", Version = "v1" });
 
-//builder.Services.AddAuthorization(opts =>
-//{
-//    opts.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-//});
+    // Define Security Scheme
+    c.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
+        {
+            Description =
+                "JWT Authorization header using the Bearer scheme.\r\n\r\n"
+                + "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n"
+                + "Example: \"Bearer 12345abcdef\"",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Scheme = "Bearer", // Must be "Bearer"
+            BearerFormat = "JWT" // Optional - can be helpful for UI
+        }
+    );
 
-//builder
-//    .Services.AddAuthentication("Bearer")
-//    .AddJwtBearer(opts =>
-//    {
-//        opts.TokenValidationParameters = new()
-//        {
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidateIssuerSigningKey = true,
-//            ValidIssuer = builder.Configuration.GetValue<string>("Authentication:Issuer"),
-//            ValidAudience = builder.Configuration.GetValue<string>("Authentication:Audience"),
-//            IssuerSigningKey = new SymmetricSecurityKey(
-//                Encoding.ASCII.GetBytes(
-//                    builder.Configuration.GetValue<string>("Authentication:SecretKey")
-//                )
-//            )
-//        };
-//    });
+    // Make sure swagger UI requires a token
+    c.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                // Reference the definition you set above
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                },
+                new string[] { }
+            }
+        }
+    );
+});
+
+builder.Services.AddAuthorization(opts =>
+{
+    opts.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+});
+
+builder
+    .Services.AddAuthentication("Bearer")
+    .AddJwtBearer(opts =>
+    {
+        opts.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration.GetValue<string>("Authentication:Issuer"),
+            ValidAudience = builder.Configuration.GetValue<string>("Authentication:Audience"),
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("Authentication:SecretKey"))
+            )
+        };
+    });
 
 builder.Services.AddSingleton<IDapperDataAccess, DapperDataAccess>();
+builder.Services.AddScoped<IEntityRepository<UserModel, UserCreateDto>, UserRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
@@ -64,7 +99,7 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 builder.Services.AddScoped<IEntityRepository<CustomerTypeModel, CustomerTypeCreateDto>, CustomerTypeRepository>();
 builder.Services.AddScoped<IEntityRepository<CustomerModel, CustomerCreateDto>, CustomerRepository>();
-
+builder.Services.AddScoped<IEntityRepository<RoleModel, RoleCreateDto>, RoleRepository>();
 
 var app = builder.Build();
 
@@ -82,7 +117,7 @@ app.UseCors("AllowSpecificOrigin");
 // Add cutom exception handling middleware
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

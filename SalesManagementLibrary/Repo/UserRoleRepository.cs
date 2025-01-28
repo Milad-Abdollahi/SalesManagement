@@ -12,63 +12,87 @@ namespace SalesManagementLibrary.Repo;
 
 public class UserRoleRepository : IUserRoleRepository
 {
-    private readonly IDapperDataAccess _dapperDataAccess;
+    //private readonly IDapperDataAccess _dapperDataAccess;
 
-    public UserRoleRepository(IDapperDataAccess dapperDataAccess)
+    //public UserRoleRepository(IDapperDataAccess dapperDataAccess)
+    //{
+    //    _dapperDataAccess = dapperDataAccess;
+    //}
+
+    //// Create
+    //public async Task<UserRoleModel?> CreateAsync(UserRoleCreateDto userRoleCreateDto)
+    //{
+    //    var result = await _dapperDataAccess.LoadData<UserRoleModel, dynamic>(
+    //        "[dbo].[UserRoleInsert]",
+    //        new { RoleName = userRoleCreateDto.RoleName },
+    //        "DefaultConnection"
+    //    );
+
+    //    return result.FirstOrDefault();
+    //}
+
+    //// Read
+    //public async Task<List<UserRoleModel?>> GetAllUserRoleModelsAsync()
+    //{
+    //    return await _dapperDataAccess.LoadData<UserRoleModel>(
+    //        "[dbo].[UserRolesGetAll]",
+    //        "DefaultConnection"
+    //    );
+    //}
+
+    //public async Task<UserRoleModel?> GetUserRoleByIdAsync(int id)
+    //{
+    //    var result = await _dapperDataAccess.LoadData<UserRoleModel, dynamic>(
+    //        "[dbo].[UserRoleGetById]",
+    //        new { Id = id },
+    //        "DefaultConnection"
+    //    );
+    //    return result.FirstOrDefault();
+    //}
+
+    //// Update
+    //public Task UpdateUserRoleAsync(int id, UserRoleCreateDto userRoleCreateDto)
+    //{
+    //    var parameters = new { RoleId = id, RoleName = userRoleCreateDto.RoleName };
+
+    //    return _dapperDataAccess.SaveData<dynamic>(
+    //        "[dbo].[UserRoleUpdate]",
+    //        parameters,
+    //        "DefaultConnection"
+    //    );
+    //}
+
+    //// Delete
+    //public Task DeleteUserRoleAsync(int id)
+    //{
+    //    return _dapperDataAccess.SaveData<dynamic>(
+    //        "[dbo].[UserRoleDelete]",
+    //        new { RoleId = id },
+    //        "DefaultConnection"
+    //    );
+    //}
+    public Task<UserRoleModel?> CreateAsync(UserRoleCreateDto userRoleCreateDto)
     {
-        _dapperDataAccess = dapperDataAccess;
+        throw new NotImplementedException();
     }
 
-    // Create
-    public async Task<UserRoleModel?> CreateAsync(UserRoleCreateDto userRoleCreateDto)
-    {
-        var result = await _dapperDataAccess.LoadData<UserRoleModel, dynamic>(
-            "[dbo].[UserRoleInsert]",
-            new { RoleName = userRoleCreateDto.RoleName },
-            "DefaultConnection"
-        );
-
-        return result.FirstOrDefault();
-    }
-
-    // Read
-    public async Task<List<UserRoleModel?>> GetAllUserRoleModelsAsync()
-    {
-        return await _dapperDataAccess.LoadData<UserRoleModel>(
-            "[dbo].[UserRolesGetAll]",
-            "DefaultConnection"
-        );
-    }
-
-    public async Task<UserRoleModel?> GetUserRoleByIdAsync(int id)
-    {
-        var result = await _dapperDataAccess.LoadData<UserRoleModel, dynamic>(
-            "[dbo].[UserRoleGetById]",
-            new { Id = id },
-            "DefaultConnection"
-        );
-        return result.FirstOrDefault();
-    }
-
-    // Update
-    public Task UpdateUserRoleAsync(int id, UserRoleCreateDto userRoleCreateDto)
-    {
-        var parameters = new { RoleId = id, RoleName = userRoleCreateDto.RoleName };
-
-        return _dapperDataAccess.SaveData<dynamic>(
-            "[dbo].[UserRoleUpdate]",
-            parameters,
-            "DefaultConnection"
-        );
-    }
-
-    // Delete
     public Task DeleteUserRoleAsync(int id)
     {
-        return _dapperDataAccess.SaveData<dynamic>(
-            "[dbo].[UserRoleDelete]",
-            new { RoleId = id },
-            "DefaultConnection"
-        );
+        throw new NotImplementedException();
+    }
+
+    public Task<List<UserRoleModel?>> GetAllUserRoleModelsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<UserRoleModel?> GetUserRoleByIdAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateUserRoleAsync(int id, UserRoleCreateDto userRoleCreateDto)
+    {
+        throw new NotImplementedException();
     }
 }

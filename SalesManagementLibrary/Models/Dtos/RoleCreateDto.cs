@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace SalesManagementLibrary.Models.Dtos;
 
-public class UserRoleCreateDto
+public class RoleCreateDto
 {
-    public int UserId { get; set; }
-    public int RoleId { get; set; }
+    public string Name { get; set; }
 }

@@ -38,7 +38,7 @@ public class UserController : ControllerBase
     // GET: api/<UserController>
     public async Task<ActionResult<List<UserModel>>> Get()
     {
-        var output = await _userRepository.GetAllUsers();
+        var output = await _userRepository.GetAllAsync();
         return Ok(output);
     }
 
@@ -48,7 +48,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = await _userRepository.GetUserById(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             return Ok(user);
         }
         catch (Exception ex)
@@ -63,7 +63,16 @@ public class UserController : ControllerBase
     [HttpPut("{userId}")]
     public async Task<ActionResult> Put(int userId, [FromBody] UserCreateDto userCreateDto)
     {
-        await _userRepository.UpdateUser(userId, userCreateDto);
+        await _userRepository.UpdateAsync(userId, userCreateDto);
+        return Ok();
+    }
+
+    //public record AssignRoleDto(int UserId, int RoleId);
+
+    [HttpPost("assign-role")]
+    public async Task<ActionResult> AssignRoleToUser([FromBody] UserRoleCreateDto dto)
+    {
+        await _userRepository.AssignRoleToUserAsync(dto.UserId, dto.RoleId);
         return Ok();
     }
 
@@ -71,6 +80,6 @@ public class UserController : ControllerBase
     [HttpDelete("{userId}")]
     public async void Delete(int userId)
     {
-        await _userRepository.DeleteUser(userId);
+        await _userRepository.DeleteAsync(userId);
     }
 }

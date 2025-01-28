@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SalesManagementLibrary.DataAccess.Dapper;
+﻿using SalesManagementLibrary.DataAccess.Dapper;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
 using SalesManagementLibrary.Repo.BaseRepo;

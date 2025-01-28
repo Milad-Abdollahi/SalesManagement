@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BCrypt.Net;
-using SalesManagementLibrary.DataAccess.Dapper;
+﻿using SalesManagementLibrary.DataAccess.Dapper;
 using SalesManagementLibrary.Models;
 using SalesManagementLibrary.Models.Dtos;
+using SalesManagementLibrary.Repo.BaseRepo;
 using SalesManagementLibrary.Repo.Interfaces;
 
 namespace SalesManagementLibrary.Repo;
 
-public class UserRepository : IUserRepository
+public class UserRepository : BaseRepository, IUserRepository
 {
     private readonly IDapperDataAccess _dapperDataAccess;
 
@@ -23,92 +18,107 @@ public class UserRepository : IUserRepository
     // Create
     public async Task<UserModel?> CreateAsync(UserCreateDto userCreateDto)
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreateDto.PasswordHash);
-
-        var parameters = new
+        return await ExecWithErrHandling<UserModel?>(async () =>
         {
-            userCreateDto.Username,
-            PasswordHash = hashedPassword,
-            userCreateDto.Email,
-            userCreateDto.RoleId,
-            userCreateDto.CreatedDate,
-            userCreateDto.LastLoginDate
-        };
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreateDto.Password);
 
-        var result = await _dapperDataAccess.LoadData<UserModel, dynamic>(
-            "dbo.UserInsert",
-            parameters,
-            "DefaultConnection"
-        );
+            var parameters = new
+            {
+                userCreateDto.Username,
+                PasswordHash = hashedPassword,
+                userCreateDto.Email,
+                userCreateDto.CreatedDate,
+                userCreateDto.LastLoginDate
+            };
 
-        return result.FirstOrDefault();
+            var result = await _dapperDataAccess.LoadData<UserModel, dynamic>(
+                "dbo.UserInsert",
+                parameters,
+                "DefaultConnection"
+            );
+
+            return result.FirstOrDefault();
+        });
     }
 
     // Read
-    public async Task<List<UserModel?>> GetAllUsers()
+    public async Task<List<UserModel?>> GetAllAsync()
     {
-        return await _dapperDataAccess.LoadData<UserModel>("dbo.UsersGetAll", "DefaultConnection");
+        return await this.ExecWithErrHandling<List<UserModel?>>(async () =>
+        {
+            return await _dapperDataAccess.LoadData<UserModel>("dbo.UsersGetAll", "DefaultConnection");
+        });
     }
 
-    public async Task<UserModel?> GetUserById(int id)
+    public async Task<UserModel?> GetByIdAsync(int id)
     {
-        var results = await _dapperDataAccess.LoadData<UserModel, dynamic>(
-            "[dbo].[UsersGetById]",
-            new { Id = id },
-            "DefaultConnection"
-        );
-
-        var user = results.FirstOrDefault();
-
-        if (user == null)
+        return await ExecWithErrHandling(async () =>
         {
-            throw new KeyNotFoundException($"User with Id {id} not found.");
-        }
+            var results = await _dapperDataAccess.LoadData<UserModel, dynamic>(
+                "[dbo].[UsersGetById]",
+                new { Id = id },
+                "DefaultConnection"
+            );
 
-        return results.FirstOrDefault();
+            var user = results.FirstOrDefault();
+
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with Id {id} not found.");
+            }
+
+            return results.FirstOrDefault();
+        });
     }
 
     public async Task<UserModel?> GetUserByUsername(string userName)
     {
-        var results = await _dapperDataAccess.LoadData<UserModel?, dynamic>(
-            "[dbo].[UsersGetByUsername]",
-            new { UserName = userName },
-            "DefaultConnection"
-        );
-        return results.FirstOrDefault();
+        return await ExecWithErrHandling<UserModel?>(async () =>
+        {
+            var results = await _dapperDataAccess.LoadData<UserModel?, dynamic>(
+                "[dbo].[UsersGetByUsername]",
+                new { UserName = userName },
+                "DefaultConnection"
+            );
+            return results.FirstOrDefault();
+        });
     }
 
     // Update
-    public Task UpdateUser(int userId, UserCreateDto userCreateDto)
+    public async Task UpdateAsync(int userId, UserCreateDto userCreateDto)
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreateDto.PasswordHash);
-        var parameters = new
+        await ExecWithErrHandling(async () =>
         {
-            Id = userId,
-            userCreateDto.Username,
-            PasswordHash = hashedPassword,
-            userCreateDto.Email,
-            userCreateDto.RoleId,
-            userCreateDto.CreatedDate,
-            userCreateDto.LastLoginDate
-        };
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreateDto.Password);
+            var parameters = new
+            {
+                Id = userId,
+                userCreateDto.Username,
+                PasswordHash = hashedPassword,
+                userCreateDto.Email,
+                userCreateDto.CreatedDate,
+                userCreateDto.LastLoginDate
+            };
 
-        return _dapperDataAccess.SaveData<dynamic>(
-            "[dbo].[UserUpdate]",
-            parameters,
-            "DefaultConnection"
-        );
+            await _dapperDataAccess.SaveData<dynamic>("[dbo].[UserUpdate]", parameters, "DefaultConnection");
+        });
+    }
+
+    public async Task AssignRoleToUserAsync(int userId, int roleId)
+    {
+        await ExecWithErrHandling(async () =>
+        {
+            var parameters = new { UserId = userId, RoleId = roleId };
+            await _dapperDataAccess.SaveData<dynamic>("[dbo].[UserAssignRole]", parameters, "DefaultConnection");
+        });
     }
 
     // Delete
-
-
-    public Task DeleteUser(int Id)
+    public async Task DeleteAsync(int Id)
     {
-        return _dapperDataAccess.SaveData<dynamic>(
-            "[dbo].[UsersDelete]",
-            new { Id },
-            "DefaultConnection"
-        );
+        await ExecWithErrHandling(async () =>
+        {
+            await _dapperDataAccess.SaveData<dynamic>("[dbo].[UsersDelete]", new { Id }, "DefaultConnection");
+        });
     }
 }
